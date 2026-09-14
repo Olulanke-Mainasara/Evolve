@@ -1,0 +1,31 @@
+.chapter {
+  display: grid;
+  place-items: center;
+  min-height: 100svh;
+  padding-block: 16svh;
+  padding-inline: clamp(16px, 6vw, 96px);
+  background: var(--void);
+  color: var(--bone);
+}
+
+.chapter__inner {
+  max-width: 18ch;
+  text-align: center;
+}
+
+.chapter__number {
+  margin: 0 0 0.6em;
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 2vw, 28px);
+  font-style: italic;
+}
+
+.chapter__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(40px, 7vw, 112px);
+  font-weight: 800;
+  font-stretch: 112%;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}

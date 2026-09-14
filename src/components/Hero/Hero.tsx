@@ -1,11 +1,12 @@
 import { useRef, type RefObject } from 'react'
-import { gsap, useGSAP } from '../../lib/gsap'
+import { gsap, ScrollTrigger, useGSAP } from '../../lib/gsap'
 import { lockScroll, unlockScroll } from '../../lib/smoothScroll'
 import { drawEye } from './drawEye'
 import { EyeIcon } from './EyeIcon'
 import { createIntro, type Intro } from './introTimeline'
 import { applyRevealedState, collectParts, measureHero, waitForAssets, type HeroGeometry } from './layout'
 import { PHOTO } from './photo'
+import { createPupilDive, type PupilDive } from './pupilDive'
 import './Hero.css'
 
 function Word({ slotPart }: { slotPart?: string }) {
@@ -37,6 +38,7 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
           let cancelled = false
           let geo: HeroGeometry | null = null
           let intro: Intro | null = null
+          let dive: PupilDive | null = null
           let revealed = false
           let frame = 0
 
@@ -50,6 +52,7 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
             geo = measureHero(parts)
             if (revealed) applyRevealedState(parts, geo)
             else intro?.redraw()
+            dive?.render()
           }
 
           const onResize = () => {
@@ -60,6 +63,11 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
           const settle = (photoOk: boolean) => {
             nav.dataset.on = photoOk ? 'photo' : 'ground'
             unlockScroll()
+            dive = createPupilDive(parts, nav, getGeo, {
+              mode: photoOk && !reduce ? 'zoom' : 'fade',
+              restingBackdrop: photoOk ? 'photo' : 'ground',
+            })
+            ScrollTrigger.refresh()
           }
 
           if (!reduce) lockScroll()
@@ -110,6 +118,7 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
             cancelled = true
             cancelAnimationFrame(frame)
             window.removeEventListener('resize', onResize)
+            dive?.kill()
             unlockScroll()
           }
         },
