@@ -89,7 +89,7 @@ These are pure functions with no DOM access, which is what makes them unit-testa
 - the eyelid opening's bounding box
 
 **Functions:**
-- `fitToSlot(slotRect, photo)` returns the photo scale and translation that place the eyelid opening exactly over the O slot's almond.
+- `fitToSlot(almond, photo)` returns the photo scale and translation that put the pupil on the almond's center, with iris height equal to almond height.
 - `coverAnchored(viewport, anchorPoint, photo)` returns the smallest scale where the photo covers the viewport with its pupil pinned at `anchorPoint` (the O slot's center). That scale is `max(ax / (px·w), (W−ax) / ((1−px)·w), ay / (py·h), (H−ay) / ((1−py)·h))`, with the translation derived from it.
 - `almondPath(center, width, height, openness)` returns the SVG path string for both the icon's opening and the reveal clip. Openness 0 is a flat line and 1 is fully open.
 - `almondCoverScale(viewport, center, almond)` returns the scale at which the almond clip contains all four viewport corners.
@@ -111,7 +111,8 @@ These are pure functions with no DOM access, which is what makes them unit-testa
 | 1.3–1.75 | Eye opens: lid path openness 0→1, lashes rotate, `.reveal` clip opens with the same almond. Ease `power3.out`. The photo is sized with `fitToSlot`, so nothing of it is visible while the eye is closed. |
 | 1.75–2.0 | Eye icon strokes fade out |
 | 2.0–2.4 | Hold on the eye-as-O |
-| 2.4–3.6 | Expansion: the almond clip scales to `almondCoverScale` while the photo goes from the fit transform to the `coverAnchored` transform. Both use ease `power3.inOut`, and the pupil stays on the O center throughout. |
+| 2.4–3.2 | Grow: the photo scales from the fit transform to the `coverAnchored` transform (`power3.inOut`), and the almond clip scales with it so the lids stay on the real eye. The pupil stays on the O center throughout. |
+| 3.2–3.7 | Burst: the almond clip opens out to `almondCoverScale` (`power2.in`), revealing the rest of the photo, which already covers the hero. |
 | 3.2–3.9 | Nav, tagline and scroll prompt fade and rise in, staggered |
 | ~3.9 | Unlock scrolling, then create the dive ScrollTrigger |
 
@@ -213,3 +214,17 @@ src/assets/eye.avif, eye.webp      (eye.png kept, not imported)
 - Story chapters, parallax sections, chapter navigation and their content and imagery (sub-project 2)
 - Sourcing a higher-resolution photo
 - Deployment
+
+## Planning revisions (2026-09-14)
+
+1. **Photo fit:** the pupil sits at the almond's center and the iris height equals the almond height. Matching the eyelid opening instead would be unreliable, because the photo's eyelid is tilted about 15°.
+2. **Expansion runs in two phases:**
+   - *Grow* (2.4–3.2s, `power3.inOut`): the photo scales from its fit size to cover size, and the clip tracks the eye exactly.
+   - *Burst* (3.2–3.7s, `power2.in`): the clip opens out to cover the viewport.
+   - A single combined tween would let the clip outrun the photo and expose its rectangular edges.
+3. **Resize during the intro:** the geometry is re-measured and the current frame redrawn (every frame is drawn from proxy state). The timeline does not jump to its end.
+4. **Files:**
+   - The two animations are plain functions (`introTimeline.ts`, `pupilDive.ts`) orchestrated by `Hero.tsx`, not hooks. Their ordering depends on async asset loading.
+   - Added: `layout.ts` (DOM measurement), `drawEye.ts`, `photo.ts`, `lib/gsap.ts`, `lib/useTheme.ts`, `ChapterStub.css`, `Nav.css`.
+5. **Theme control:** two buttons, "Light" and "Dark", each with `aria-pressed`, inside a labelled group. This keeps each accessible name identical to its visible text.
+6. **`.hero__void`:** a full-screen black cover used by the fade dive (reduced motion or a failed photo).
