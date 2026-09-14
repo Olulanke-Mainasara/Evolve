@@ -1,0 +1,53 @@
+@import 'tailwindcss';
+
+/* dark: follows the site's theme toggle (html[data-theme]), not only the OS setting */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+  --color-bone: #ede8dd;
+  --color-ink: #0e0d0b;
+  --color-void: #000000;
+  --color-light: #ffffff;
+
+  --font-display: 'Archivo Variable', 'Arial Black', system-ui, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+}
+
+/* Theme roles: bg-ground and text-fg swap with html[data-theme] */
+@theme inline {
+  --color-ground: var(--ground);
+  --color-fg: var(--fg);
+}
+
+:root {
+  --ground: #ede8dd;
+  --fg: #0e0d0b;
+  color-scheme: light;
+}
+
+/* Fallback when the inline theme script could not run */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ground: #0e0d0b;
+    --fg: #ede8dd;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --ground: #0e0d0b;
+  --fg: #ede8dd;
+  color-scheme: dark;
+}
+
+@layer base {
+  body {
+    @apply bg-ground font-serif text-fg antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  html.is-locked,
+  html.is-locked body {
+    overflow: hidden;
+  }
+}

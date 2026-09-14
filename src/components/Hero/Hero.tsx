@@ -9,11 +9,17 @@ import { PHOTO } from './photo'
 import { createPupilDive, type PupilDive } from './pupilDive'
 import './Hero.css'
 
+/** The three word copies (base, light, ink) share this box so they align exactly. */
+const layer = 'absolute top-0 left-0 grid h-svh w-full place-items-center'
+
 function Word({ slotPart }: { slotPart?: string }) {
   return (
-    <p className="word" aria-hidden="true">
+    <p
+      aria-hidden="true"
+      className="relative font-display text-(length:--word-size,14vw) leading-none font-black font-stretch-125% tracking-[-0.01em] whitespace-nowrap select-none"
+    >
       <span>EV</span>
-      <span className="word__slot" data-part={slotPart} />
+      <span data-part={slotPart} className="mx-[0.1em] inline-block h-[1cap] w-[1.5cap] align-baseline" />
       <span>LVE</span>
     </p>
   )
@@ -130,41 +136,47 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
   )
 
   return (
-    <section ref={heroRef} className="hero" id="top">
+    <section ref={heroRef} id="top" className="group relative h-lvh overflow-hidden bg-ground">
       <h1 className="sr-only">Evolve</h1>
-      <div className="hero__stage" data-part="stage">
-        <div className="hero__layer" data-part="base-layer">
+      <div data-part="stage" className="invisible absolute inset-0 text-fg opacity-0">
+        <div data-part="base-layer" className={layer}>
           <Word slotPart="slot" />
         </div>
-        <div className="hero__layer hero__layer--light" data-part="light-layer">
+        <div data-part="light-layer" className={`${layer} hero-sweep invisible text-light`}>
           <Word />
           <EyeIcon part="eye-light" />
         </div>
-        <div className="hero__reveal" data-part="reveal">
+        <div data-part="reveal" className="invisible absolute inset-0">
           <picture>
             <source srcSet={PHOTO.avif} type="image/avif" />
             <img
-              className="hero__photo"
               data-part="photo"
               src={PHOTO.webp}
               width={PHOTO.width}
               height={PHOTO.height}
               style={{ width: PHOTO.width, height: PHOTO.height }}
               alt=""
+              className="absolute top-0 left-0 max-w-none origin-top-left select-none"
             />
           </picture>
-          <div className="hero__layer">
+          <div className={`${layer} text-ink`}>
             <Word />
           </div>
         </div>
         <EyeIcon part="eye" />
-        <div className="hero__pupil-cover" data-part="pupil-cover" />
+        <div data-part="pupil-cover" className="absolute top-0 left-0 size-0 rounded-full bg-void opacity-0" />
       </div>
-      <div className="hero__void" data-part="void" />
-      <p className="hero__tagline" data-part="tagline">
+      <div data-part="void" className="pointer-events-none absolute inset-0 bg-void opacity-0" />
+      <p
+        data-part="tagline"
+        className="invisible absolute inset-x-0 top-[calc(50svh+var(--word-size,14vw)*0.55)] px-4 text-center font-serif text-[clamp(20px,2.4vw,36px)] text-ink italic opacity-0 group-data-[photo=failed]:text-fg"
+      >
         Birds never stopped being dinosaurs.
       </p>
-      <p className="hero__cue" data-part="cue">
+      <p
+        data-part="cue"
+        className="invisible absolute inset-x-0 bottom-[calc(100lvh-100svh+clamp(20px,4svh,40px))] px-4 text-center font-serif text-[clamp(15px,1.2vw,18px)] text-ink opacity-0 group-data-[photo=failed]:text-fg"
+      >
         Scroll to look closer
       </p>
     </section>
