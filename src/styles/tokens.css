@@ -1,0 +1,29 @@
+:root {
+  --bone: #ede8dd;
+  --ink: #0e0d0b;
+  --void: #000000;
+  --light: #ffffff;
+
+  --ground: var(--bone);
+  --fg: var(--ink);
+
+  --font-display: 'Archivo Variable', 'Arial Black', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  color-scheme: light;
+}
+
+/* Fallback when the inline theme script could not run */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ground: var(--ink);
+    --fg: var(--bone);
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --ground: var(--ink);
+  --fg: var(--bone);
+  color-scheme: dark;
+}

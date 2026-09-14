@@ -1,6 +1,3 @@
-/* Hero animation styles stay in plain CSS; the rest of the site uses Tailwind.
-   Colors and fonts come from the Tailwind theme variables in src/styles/app.css. */
-
 .hero {
   position: relative;
   height: 100lvh;
@@ -28,12 +25,24 @@
 }
 
 .hero__layer--light {
-  color: var(--color-light);
+  color: var(--light);
   visibility: hidden;
   /* The only gradient on the page: a soft light band, used as a mask and never as a fill.
      --sweep is driven by the intro timeline (100% = off the left edge, 0% = off the right). */
-  -webkit-mask-image: linear-gradient(100deg, transparent 42%, #000 48%, #000 52%, transparent 58%);
-  mask-image: linear-gradient(100deg, transparent 42%, #000 48%, #000 52%, transparent 58%);
+  -webkit-mask-image: linear-gradient(
+    100deg,
+    transparent 42%,
+    #000 48%,
+    #000 52%,
+    transparent 58%
+  );
+  mask-image: linear-gradient(
+    100deg,
+    transparent 42%,
+    #000 48%,
+    #000 52%,
+    transparent 58%
+  );
   -webkit-mask-size: 250% 100%;
   mask-size: 250% 100%;
   -webkit-mask-repeat: no-repeat;
@@ -43,8 +52,8 @@
 }
 
 /* On the dark ground the band passes over the bone letters as a shadow instead of light. */
-[data-theme='dark'] .hero__layer--light {
-  color: var(--color-void);
+[data-theme="dark"] .hero__layer--light {
+  color: var(--void);
 }
 
 .hero__reveal {
@@ -54,7 +63,7 @@
 }
 
 .hero__reveal .hero__layer {
-  color: var(--color-light);
+  color: var(--light);
 }
 
 .hero__photo {
@@ -73,7 +82,7 @@
   top: 0;
   left: 0;
   box-sizing: content-box;
-  border: 0 solid rgb(0 0 0 / 0.68);
+  border: 0 solid rgb(0 0 0 / 0.8);
   border-radius: 50%;
   visibility: hidden;
 }
@@ -120,14 +129,14 @@
   width: 0;
   height: 0;
   border-radius: 50%;
-  background: var(--color-void);
+  background: var(--void);
   opacity: 0;
 }
 
 .hero__void {
   position: absolute;
   inset: 0;
-  background: var(--color-void);
+  background: var(--void);
   opacity: 0;
   pointer-events: none;
 }
@@ -141,12 +150,12 @@
   padding-inline: 16px;
   text-align: center;
   font-family: var(--font-mono);
-  color: var(--color-light);
+  color: var(--light);
   visibility: hidden;
   opacity: 0;
 }
 
-.hero[data-photo='failed'] :is(.hero__tagline, .hero__cue) {
+.hero[data-photo="failed"] :is(.hero__tagline, .hero__cue) {
   color: var(--fg);
 }
 

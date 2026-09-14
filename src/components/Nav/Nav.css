@@ -1,0 +1,62 @@
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 10;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: clamp(16px, 2.4vw, 32px) clamp(16px, 3vw, 44px);
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 1vw, 15px);
+  color: var(--fg);
+  transition: color 0.35s ease;
+}
+
+.nav[data-on='photo'] {
+  color: var(--light);
+}
+
+.nav[data-on='void'] {
+  color: var(--bone);
+}
+
+.nav__name {
+  font-size: 1.15em;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.nav__theme {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
+}
+
+.nav__theme button {
+  padding: 0.25em 0.1em;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.nav__theme button[aria-pressed='true'] {
+  opacity: 1;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.35em;
+}
+
+@media (hover: hover) {
+  .nav__theme button:hover {
+    opacity: 1;
+  }
+}
+
+.nav__theme button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
