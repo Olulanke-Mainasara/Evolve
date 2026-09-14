@@ -10,4 +10,6 @@ export const PHOTO = {
   height: 1023,
   pupil: { x: 676, y: 486, r: 98 },
   iris: { rx: 237, ry: 202 },
+  // Undimmed area around the eye; the blur feather eats into it, so it is drawn larger than the lid opening.
+  spot: { x: 690, y: 490, rx: 370, ry: 280, rotation: 8 },
 } satisfies PhotoMetrics & { avif: string; webp: string }

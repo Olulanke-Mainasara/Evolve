@@ -4,16 +4,14 @@ import {
   almondHalfHeightAt,
   almondPath,
   anchoredAt,
-  CLOSED_SAG,
   coverAnchored,
   diveEndScale,
   fitToSlot,
   fitWordFontSize,
-  lashes,
-  LASH_COUNT,
   lidControls,
   logLerp,
   scaleAlmond,
+  spotlightRing,
   type Almond,
   type PhotoMetrics,
 } from './geometry'
@@ -23,6 +21,7 @@ const photo: PhotoMetrics = {
   height: 1023,
   pupil: { x: 676, y: 486, r: 98 },
   iris: { rx: 237, ry: 202 },
+  spot: { x: 690, y: 490, rx: 370, ry: 280, rotation: 8 },
 }
 const almond: Almond = { cx: 600, cy: 400, width: 210, height: 140 }
 
@@ -128,26 +127,19 @@ describe('dive', () => {
   })
 })
 
-describe('lashes', () => {
-  it('hang down when closed and point up when open', () => {
-    const closed = lashes(almond, 0, 20)
-    const open = lashes(almond, 1, 20)
-    expect(closed).toHaveLength(LASH_COUNT)
-    closed.forEach((lash) => expect(lash.y2).toBeGreaterThan(lash.y1))
-    open.forEach((lash) => expect(lash.y2).toBeLessThan(lash.y1))
-  })
+describe('spotlightRing', () => {
+  it('puts the hole on the photo spot and covers every viewport corner', () => {
+    const viewport = { width: 1440, height: 900 }
+    const transform = { x: -40, y: -20, scale: 0.9 }
+    const ring = spotlightRing(viewport, photo, transform)
+    const cx = ring.left + ring.border + ring.width / 2
+    const cy = ring.top + ring.border + ring.height / 2
 
-  it('fan outward when open', () => {
-    const open = lashes(almond, 1, 20)
-    expect(open[0].x2).toBeLessThan(open[0].x1)
-    expect(open[LASH_COUNT - 1].x2).toBeGreaterThan(open[LASH_COUNT - 1].x1)
-  })
-
-  it('shrink to nothing where the lid is straight', () => {
-    const flip = CLOSED_SAG / (1 + CLOSED_SAG)
-    lashes(almond, flip, 20).forEach((lash) => {
-      expect(lash.x2).toBeCloseTo(lash.x1)
-      expect(lash.y2).toBeCloseTo(lash.y1)
-    })
+    expect(cx).toBeCloseTo(transform.x + photo.spot.x * transform.scale)
+    expect(cy).toBeCloseTo(transform.y + photo.spot.y * transform.scale)
+    expect(ring.width).toBeCloseTo(photo.spot.rx * 2 * transform.scale)
+    expect(ring.height).toBeCloseTo(photo.spot.ry * 2 * transform.scale)
+    const farthest = Math.max(...[[0, 0], [1440, 0], [0, 900], [1440, 900]].map(([x, y]) => Math.hypot(x - cx, y - cy)))
+    expect(ring.border).toBeGreaterThanOrEqual(farthest + ring.blur * 3 - 1e-6)
   })
 })

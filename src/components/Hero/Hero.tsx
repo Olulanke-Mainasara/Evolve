@@ -4,7 +4,14 @@ import { lockScroll, unlockScroll } from '../../lib/smoothScroll'
 import { drawEye } from './drawEye'
 import { EyeIcon } from './EyeIcon'
 import { createIntro, type Intro } from './introTimeline'
-import { applyRevealedState, collectParts, measureHero, waitForAssets, type HeroGeometry } from './layout'
+import {
+  applyRevealedState,
+  collectParts,
+  measureHero,
+  setSpotlight,
+  waitForAssets,
+  type HeroGeometry,
+} from './layout'
 import { PHOTO } from './photo'
 import { createPupilDive, type PupilDive } from './pupilDive'
 import './Hero.css'
@@ -56,8 +63,12 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
           const relayout = () => {
             if (!geo) return
             geo = measureHero(parts)
-            if (revealed) applyRevealedState(parts, geo)
-            else intro?.redraw()
+            if (revealed) {
+              applyRevealedState(parts, geo)
+            } else {
+              setSpotlight(parts.dim, geo.spotlight)
+              intro?.redraw()
+            }
             dive?.render()
           }
 
@@ -93,7 +104,7 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
                   revealed = true
                   applyRevealedState(parts, geo)
                   gsap.set(parts.eye, { autoAlpha: 0 })
-                  gsap.set(parts.reveal, { autoAlpha: 1 })
+                  gsap.set([parts.reveal, parts.dim], { autoAlpha: 1 })
                 } else {
                   drawEye(parts.eye, geo.almond, 1, geo.strokeWidth)
                 }
@@ -159,7 +170,11 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
               className="absolute top-0 left-0 max-w-none origin-top-left select-none"
             />
           </picture>
-          <div className={`${layer} text-ink`}>
+          <div
+            data-part="dim"
+            className="invisible absolute top-0 left-0 box-content rounded-[50%] border-solid border-black/55"
+          />
+          <div className={`${layer} text-light`}>
             <Word />
           </div>
         </div>
@@ -169,13 +184,13 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
       <div data-part="void" className="pointer-events-none absolute inset-0 bg-void opacity-0" />
       <p
         data-part="tagline"
-        className="invisible absolute inset-x-0 top-[calc(50svh+var(--word-size,14vw)*0.55)] px-4 text-center font-serif text-[clamp(20px,2.4vw,36px)] text-ink italic opacity-0 group-data-[photo=failed]:text-fg"
+        className="invisible absolute inset-x-0 top-[calc(50svh+var(--word-size,14vw)*0.55)] px-4 text-center font-mono text-[clamp(14px,1.3vw,19px)] text-light opacity-0 group-data-[photo=failed]:text-fg"
       >
         Birds never stopped being dinosaurs.
       </p>
       <p
         data-part="cue"
-        className="invisible absolute inset-x-0 bottom-[calc(100lvh-100svh+clamp(20px,4svh,40px))] px-4 text-center font-serif text-[clamp(15px,1.2vw,18px)] text-ink opacity-0 group-data-[photo=failed]:text-fg"
+        className="invisible absolute inset-x-0 bottom-[calc(100lvh-100svh+clamp(20px,4svh,40px))] px-4 text-center font-mono text-[clamp(11px,0.85vw,13px)] text-light opacity-0 group-data-[photo=failed]:text-fg"
       >
         Scroll to look closer
       </p>

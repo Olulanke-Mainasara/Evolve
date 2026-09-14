@@ -1,7 +1,7 @@
 import { gsap } from '../../lib/gsap'
 import { drawEye } from './drawEye'
 import { almondPath, anchoredAt, lerp, scaleAlmond } from './geometry'
-import { setPhotoTransform, type HeroGeometry, type HeroParts } from './layout'
+import { setPhotoTransform, setSpotlight, type HeroGeometry, type HeroParts } from './layout'
 import { PHOTO } from './photo'
 
 export interface Intro {
@@ -45,24 +45,27 @@ export function createIntro(
   timeline
     .to(parts.stage, { autoAlpha: 1, duration: 0.3, ease: 'power1.out' }, 0)
     .set(parts.lightLayer, { autoAlpha: 1 }, 0.8)
-    .to(state, { sweep: 0, duration: 0.6, ease: 'power2.inOut' }, 0.8)
-    .set(parts.lightLayer, { autoAlpha: 0 }, 1.4)
-    .to(state, { open: 1, duration: 0.45, ease: 'power3.out' }, 1.3)
+    .to(state, { sweep: 0, duration: 1.1, ease: 'power1.inOut' }, 0.8)
+    .set(parts.lightLayer, { autoAlpha: 0 }, 1.9)
+    .to(state, { open: 1, duration: 0.8, ease: 'power2.inOut' }, 1.8)
 
   if (photoOk) {
     timeline
-      .set(parts.reveal, { autoAlpha: 1 }, 1.3)
-      .to(parts.eye, { autoAlpha: 0, duration: 0.25, ease: 'power1.out' }, 1.75)
-      .to(state, { grow: 1, duration: 0.8, ease: 'power3.inOut' }, 2.4)
-      .to(state, { burst: 1, duration: 0.5, ease: 'power2.in' }, 3.2)
+      .set(parts.reveal, { autoAlpha: 1 }, 1.8)
+      .to(parts.eye, { autoAlpha: 0, duration: 0.25, ease: 'power1.out' }, 2.6)
+      .to(state, { grow: 1, duration: 0.8, ease: 'power3.inOut' }, 3.25)
+      // The dimming ring is placed for the cover transform, which the photo reaches as the burst starts.
+      .set(parts.dim, { autoAlpha: 1 }, 4.05)
+      .to(state, { burst: 1, duration: 0.5, ease: 'power2.in' }, 4.05)
   }
 
   timeline.to(
     [nav, parts.tagline, parts.cue],
     { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power2.out', stagger: 0.12 },
-    photoOk ? 3.2 : 1.9,
+    photoOk ? 4.05 : 2.7,
   )
 
+  setSpotlight(parts.dim, getGeo().spotlight)
   redraw()
   return { timeline, redraw }
 }

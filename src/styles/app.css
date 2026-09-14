@@ -10,7 +10,7 @@
   --color-light: #ffffff;
 
   --font-display: 'Archivo Variable', 'Arial Black', system-ui, sans-serif;
-  --font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 /* Theme roles: bg-ground and text-fg swap with html[data-theme] */
@@ -42,7 +42,7 @@
 
 @layer base {
   body {
-    @apply bg-ground font-serif text-fg antialiased;
+    @apply bg-ground font-mono text-fg antialiased;
     text-rendering: optimizeLegibility;
   }
 

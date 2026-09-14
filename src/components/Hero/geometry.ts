@@ -23,25 +23,37 @@ export interface PhotoTransform {
   scale: number
 }
 
-/** Pupil and iris measured in the photo's source pixels. */
+/** Ellipse around the whole eye, in source pixels; rotation in degrees, clockwise. */
+export interface PhotoSpot {
+  x: number
+  y: number
+  rx: number
+  ry: number
+  rotation: number
+}
+
+/** Pupil, iris and eye spotlight measured in the photo's source pixels. */
 export interface PhotoMetrics {
   width: number
   height: number
   pupil: { x: number; y: number; r: number }
   iris: { rx: number; ry: number }
+  spot: PhotoSpot
 }
 
-export interface Lash {
-  x1: number
-  y1: number
-  x2: number
-  y2: number
+/** Box for a thick-bordered ellipse: its hole sits on the eye, its blurred border dims everything else. */
+export interface SpotlightRing {
+  left: number
+  top: number
+  width: number
+  height: number
+  border: number
+  blur: number
+  rotation: number
 }
 
 /** How far the closed lid dips, as a fraction of the open lid's control offset. */
 export const CLOSED_SAG = 0.35
-const LASH_POSITIONS = [0.18, 0.34, 0.5, 0.66, 0.82]
-export const LASH_COUNT = LASH_POSITIONS.length
 
 export const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 
@@ -130,11 +142,6 @@ const lidX = (t: number) => {
   return -(u ** 3) - 1.5 * u * u * t + 1.5 * u * t * t + t ** 3
 }
 
-const lidXSlope = (t: number) => {
-  const u = 1 - t
-  return 1.5 * u * u + 6 * u * t + 1.5 * t * t
-}
-
 /** Half-height of the fully open almond at horizontal offset `dx` from its center. */
 export function almondHalfHeightAt(almond: Almond, dx: number): number {
   const target = Math.abs(dx) / (almond.width / 2)
@@ -180,28 +187,22 @@ export function diveEndScale(viewport: Size, pupil: Point, radius: number): numb
 }
 
 /**
- * Lashes along the upper lid. They hang down while the lid dips, shrink to nothing
- * where the lid is straight, then grow back pointing up and fanned outward.
+ * Places the spotlight ring for a photo transform. The ring's border reaches past the
+ * farthest viewport corner plus the blur falloff, so only the hole shows undimmed.
  */
-export function lashes(almond: Almond, openness: number, length: number): Lash[] {
-  const { cx, cy, width } = almond
-  const { upper } = lidControls(almond.height, openness)
-  const flip = CLOSED_SAG / (1 + CLOSED_SAG)
-  const hanging = openness < flip
-  const size = length * (hanging ? 1 - openness / flip : (openness - flip) / (1 - flip))
-  const direction = hanging ? 1 : -1
-
-  return LASH_POSITIONS.map((t) => {
-    const x1 = cx + (width / 2) * lidX(t)
-    const y1 = cy + upper * 3 * t * (1 - t)
-    const dx = (width / 2) * lidXSlope(t)
-    const dy = upper * 3 * (1 - 2 * t)
-    const norm = Math.hypot(dx, dy) || 1
-    return {
-      x1,
-      y1,
-      x2: x1 + (-dy / norm) * size * direction,
-      y2: y1 + (dx / norm) * size * direction,
-    }
-  })
+export function spotlightRing(
+  viewport: Size,
+  photo: PhotoMetrics,
+  transform: PhotoTransform,
+  featherRatio = 0.18,
+): SpotlightRing {
+  const { spot } = photo
+  const cx = transform.x + spot.x * transform.scale
+  const cy = transform.y + spot.y * transform.scale
+  const rx = spot.rx * transform.scale
+  const ry = spot.ry * transform.scale
+  const blur = ry * featherRatio
+  const farthest = Math.max(...corners(viewport).map((c) => Math.hypot(c.x - cx, c.y - cy)))
+  const border = farthest + blur * 3
+  return { left: cx - rx - border, top: cy - ry - border, width: rx * 2, height: ry * 2, border, blur, rotation: spot.rotation }
 }

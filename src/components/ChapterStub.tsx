@@ -24,7 +24,7 @@ export function ChapterStub() {
       className="grid min-h-svh place-items-center bg-void px-[clamp(16px,6vw,96px)] py-[16svh] text-bone"
     >
       <div className="max-w-[18ch] text-center">
-        <p data-reveal className="mb-[0.6em] font-serif text-[clamp(20px,2vw,28px)] italic">
+        <p data-reveal className="mb-[0.8em] font-mono text-[clamp(13px,1.1vw,16px)]">
           Chapter 1
         </p>
         <h2

@@ -4,9 +4,11 @@ import {
   diveEndScale,
   fitToSlot,
   fitWordFontSize,
+  spotlightRing,
   type Almond,
   type PhotoTransform,
   type Size,
+  type SpotlightRing,
 } from './geometry'
 import { PHOTO } from './photo'
 
@@ -21,6 +23,7 @@ export interface HeroParts {
   lightLayer: HTMLElement
   reveal: HTMLElement
   photo: HTMLImageElement
+  dim: HTMLElement
   eye: SVGSVGElement
   eyeLight: SVGSVGElement
   pupilCover: HTMLElement
@@ -38,6 +41,8 @@ export interface HeroGeometry {
   fit: PhotoTransform
   cover: PhotoTransform
   clipCoverScale: number
+  /** Dimming ring placed for the cover transform. */
+  spotlight: SpotlightRing
   pupilRadius: number
   diveScale: number
 }
@@ -56,6 +61,7 @@ export function collectParts(hero: HTMLElement): HeroParts {
     lightLayer: part('light-layer'),
     reveal: part('reveal'),
     photo: part<HTMLImageElement>('photo'),
+    dim: part('dim'),
     eye: part<SVGSVGElement>('eye'),
     eyeLight: part<SVGSVGElement>('eye-light'),
     pupilCover: part('pupil-cover'),
@@ -111,6 +117,7 @@ export function measureHero(parts: HeroParts): HeroGeometry {
     fit: fitToSlot(almond, PHOTO),
     cover,
     clipCoverScale: almondCoverScale(viewport, almond),
+    spotlight: spotlightRing(viewport, PHOTO, cover),
     pupilRadius,
     diveScale: diveEndScale(viewport, center, pupilRadius),
   }
@@ -120,9 +127,20 @@ export function setPhotoTransform(photo: HTMLImageElement, t: PhotoTransform): v
   photo.style.transform = `translate3d(${t.x}px, ${t.y}px, 0) scale(${t.scale})`
 }
 
+export function setSpotlight(dim: HTMLElement, ring: SpotlightRing): void {
+  Object.assign(dim.style, {
+    width: `${ring.width}px`,
+    height: `${ring.height}px`,
+    borderWidth: `${ring.border}px`,
+    filter: `blur(${ring.blur}px)`,
+    transform: `translate3d(${ring.left}px, ${ring.top}px, 0) rotate(${ring.rotation}deg)`,
+  })
+}
+
 /** End state of the intro: photo covering the hero, no clip, pupil cover sized for the dive. */
 export function applyRevealedState(parts: HeroParts, geo: HeroGeometry): void {
   setPhotoTransform(parts.photo, geo.cover)
+  setSpotlight(parts.dim, geo.spotlight)
   parts.reveal.style.clipPath = 'none'
   const r = geo.pupilRadius
   parts.pupilCover.style.width = `${r * 2}px`
@@ -134,7 +152,7 @@ export function applyRevealedState(parts: HeroParts, geo: HeroGeometry): void {
 export async function waitForAssets(photo: HTMLImageElement): Promise<{ photoOk: boolean }> {
   const fonts = Promise.all([
     document.fonts.load('900 100px "Archivo Variable"'),
-    document.fonts.load('italic 400 32px "Instrument Serif"'),
+    document.fonts.load('400 16px "IBM Plex Mono"'),
   ]).catch(() => undefined)
   const decoded = photo.decode().then(
     () => true,
