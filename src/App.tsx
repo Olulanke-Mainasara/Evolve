@@ -1,13 +1,19 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import { Hero } from './components/Hero/Hero'
 import { Nav } from './components/Nav/Nav'
+import { initSmoothScroll } from './lib/smoothScroll'
 
 export default function App() {
   const navRef = useRef<HTMLElement>(null)
 
+  useEffect(() => initSmoothScroll(), [])
+
   return (
     <>
       <Nav ref={navRef} />
-      <main />
+      <main>
+        <Hero navRef={navRef} />
+      </main>
     </>
   )
 }
