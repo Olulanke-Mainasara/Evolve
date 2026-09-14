@@ -22,6 +22,7 @@ const photo: PhotoMetrics = {
   pupil: { x: 676, y: 486, r: 98 },
   iris: { rx: 237, ry: 202 },
   spot: { x: 690, y: 490, rx: 370, ry: 280, rotation: 8 },
+  tilt: 15,
 }
 const almond: Almond = { cx: 600, cy: 400, width: 210, height: 140 }
 
@@ -80,6 +81,11 @@ describe('almond lids', () => {
     expect(lower * 0.75).toBeCloseTo(70)
   })
 
+  it('rotation turns the almond clockwise around its center', () => {
+    expect(almondPath({ ...almond, rotation: 90 }, 1).startsWith('M600 295C')).toBe(true)
+    expect(almondPath({ ...almond, rotation: 0 }, 1)).toBe(almondPath(almond, 1))
+  })
+
   it('almondPath is a closed path starting at the left corner', () => {
     const d = almondPath(almond, 1)
     expect(d.startsWith('M495 400C')).toBe(true)
@@ -109,6 +115,29 @@ describe('almondCoverScale', () => {
         [0, 600],
         [1000, 600],
       ].every(([x, y]) => almondHalfHeightAt(scaleAlmond(a, factor), x - a.cx) >= Math.abs(y - a.cy))
+
+    expect(contains(scale)).toBe(true)
+    expect(contains(scale * 0.98)).toBe(false)
+  })
+
+  it('accounts for a tilted almond', () => {
+    const viewport = { width: 1000, height: 600 }
+    const a: Almond = { cx: 500, cy: 300, width: 150, height: 100, rotation: 15 }
+    const scale = almondCoverScale(viewport, a)
+    const rad = (15 * Math.PI) / 180
+    const contains = (factor: number) =>
+      [
+        [0, 0],
+        [1000, 0],
+        [0, 600],
+        [1000, 600],
+      ].every(([x, y]) => {
+        const dx = x - a.cx
+        const dy = y - a.cy
+        const localX = dx * Math.cos(rad) + dy * Math.sin(rad)
+        const localY = -dx * Math.sin(rad) + dy * Math.cos(rad)
+        return almondHalfHeightAt(scaleAlmond(a, factor), localX) >= Math.abs(localY)
+      })
 
     expect(contains(scale)).toBe(true)
     expect(contains(scale * 0.98)).toBe(false)

@@ -14,6 +14,8 @@ export interface Almond {
   cy: number
   width: number
   height: number
+  /** Clockwise tilt in degrees around the center. */
+  rotation?: number
 }
 
 /** Translation (px) and scale applied to the photo with transform-origin at its top-left. */
@@ -39,6 +41,8 @@ export interface PhotoMetrics {
   pupil: { x: number; y: number; r: number }
   iris: { rx: number; ry: number }
   spot: PhotoSpot
+  /** Clockwise tilt of the eye's corner-to-corner axis, in degrees. */
+  tilt: number
 }
 
 /** Box for a thick-bordered ellipse: its hole sits on the eye, its blurred border dims everything else. */
@@ -61,6 +65,17 @@ export const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 export const logLerp = (a: number, b: number, t: number) => a * Math.pow(b / a, t)
 
 const round = (n: number) => Math.round(n * 100) / 100
+
+const radians = (degrees = 0) => (degrees * Math.PI) / 180
+
+/** Maps an offset in the almond's own (untilted) frame to stage coordinates. */
+function almondToStage(almond: Almond, dx: number, dy: number): Point {
+  const a = radians(almond.rotation)
+  return {
+    x: almond.cx + dx * Math.cos(a) - dy * Math.sin(a),
+    y: almond.cy + dx * Math.sin(a) + dy * Math.cos(a),
+  }
+}
 
 const corners = ({ width, height }: Size): Point[] => [
   { x: 0, y: 0 },
@@ -116,21 +131,20 @@ export function lidControls(height: number, openness: number): { upper: number; 
 }
 
 export function lidPaths(almond: Almond, openness: number): { upper: string; lower: string; clip: string } {
-  const { cx, cy, width } = almond
+  const { width } = almond
   const { upper, lower } = lidControls(almond.height, openness)
-  const left = round(cx - width / 2)
-  const right = round(cx + width / 2)
-  const innerLeft = round(cx - width / 4)
-  const innerRight = round(cx + width / 4)
-  const y = round(cy)
-  const upperY = round(cy + upper)
-  const lowerY = round(cy + lower)
-  const upperCurve = `C${innerLeft} ${upperY} ${innerRight} ${upperY} ${right} ${y}`
-  const lowerCurve = `C${innerRight} ${lowerY} ${innerLeft} ${lowerY} ${left} ${y}`
+  const point = (dx: number, dy: number) => {
+    const { x, y } = almondToStage(almond, dx, dy)
+    return `${round(x)} ${round(y)}`
+  }
+  const left = point(-width / 2, 0)
+  const right = point(width / 2, 0)
+  const upperCurve = `C${point(-width / 4, upper)} ${point(width / 4, upper)} ${right}`
+  const lowerCurve = `C${point(width / 4, lower)} ${point(-width / 4, lower)} ${left}`
   return {
-    upper: `M${left} ${y}${upperCurve}`,
-    lower: `M${right} ${y}${lowerCurve}`,
-    clip: `M${left} ${y}${upperCurve}${lowerCurve}Z`,
+    upper: `M${left}${upperCurve}`,
+    lower: `M${right}${lowerCurve}`,
+    clip: `M${left}${upperCurve}${lowerCurve}Z`,
   }
 }
 
@@ -160,9 +174,16 @@ export function almondHalfHeightAt(almond: Almond, dx: number): number {
 /** Smallest scale at which the open almond contains all four viewport corners. */
 export function almondCoverScale(viewport: Size, almond: Almond): number {
   if (almond.width <= 0 || almond.height <= 0) return 1
+  const a = radians(almond.rotation)
+  // Corners in the almond's own frame (inverse rotation around its center)
+  const local = corners(viewport).map((c) => {
+    const dx = c.x - almond.cx
+    const dy = c.y - almond.cy
+    return { x: dx * Math.cos(a) + dy * Math.sin(a), y: -dx * Math.sin(a) + dy * Math.cos(a) }
+  })
   const covers = (factor: number) => {
     const scaled = scaleAlmond(almond, factor)
-    return corners(viewport).every((c) => almondHalfHeightAt(scaled, c.x - almond.cx) >= Math.abs(c.y - almond.cy))
+    return local.every((p) => almondHalfHeightAt(scaled, p.x) >= Math.abs(p.y))
   }
   if (covers(1)) return 1
   let lo = 1

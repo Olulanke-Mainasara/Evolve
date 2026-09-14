@@ -108,6 +108,7 @@ export function measureHero(parts: HeroParts): HeroGeometry {
     cy: offset.top + slot.offsetHeight / 2,
     width: slot.offsetWidth,
     height: slot.offsetHeight,
+    rotation: PHOTO.tilt,
   };
   const center = { x: almond.cx, y: almond.cy };
   const cover = coverAnchored(viewport, center, PHOTO);

@@ -12,4 +12,6 @@ export const PHOTO = {
   iris: { rx: 237, ry: 202 },
   // Undimmed area around the eye; the blur feather eats into it, so it is drawn larger than the lid opening.
   spot: { x: 690, y: 490, rx: 370, ry: 280, rotation: 8 },
+  // Inner corner ≈ (415, 480), outer corner ≈ (1020, 630): the eye leans about 15° clockwise.
+  tilt: 15,
 } satisfies PhotoMetrics & { avif: string; webp: string }
