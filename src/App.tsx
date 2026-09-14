@@ -1,3 +1,13 @@
+import { useRef } from 'react'
+import { Nav } from './components/Nav/Nav'
+
 export default function App() {
-  return <main />
+  const navRef = useRef<HTMLElement>(null)
+
+  return (
+    <>
+      <Nav ref={navRef} />
+      <main />
+    </>
+  )
 }
