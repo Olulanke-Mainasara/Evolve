@@ -57,12 +57,17 @@ export function createIntro(
       // The dimming ring is placed for the cover transform, which the photo reaches as the burst starts.
       .set(parts.dim, { autoAlpha: 1 }, 4.05)
       .to(state, { burst: 1, duration: 0.5, ease: 'power2.in' }, 4.05)
+      // The photo now fills the hero: switch the nav to its over-photo color before anything fades in.
+      .call(() => {
+        nav.dataset.on = 'photo'
+      }, [], 4.55)
   }
 
+  // UI waits for the full reveal so no text sits half over the ground and half over the photo.
   timeline.to(
     [nav, parts.tagline, parts.cue],
-    { autoAlpha: 1, y: 0, duration: 0.7, ease: 'power2.out', stagger: 0.12 },
-    photoOk ? 4.05 : 2.7,
+    { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.1 },
+    photoOk ? 4.6 : 2.7,
   )
 
   setSpotlight(parts.dim, getGeo().spotlight)

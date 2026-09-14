@@ -16,17 +16,11 @@ import { PHOTO } from './photo'
 import { createPupilDive, type PupilDive } from './pupilDive'
 import './Hero.css'
 
-/** The three word copies (base, light, ink) share this box so they align exactly. */
-const layer = 'absolute top-0 left-0 grid h-svh w-full place-items-center'
-
 function Word({ slotPart }: { slotPart?: string }) {
   return (
-    <p
-      aria-hidden="true"
-      className="relative font-display text-(length:--word-size,14vw) leading-none font-black font-stretch-125% tracking-[-0.01em] whitespace-nowrap select-none"
-    >
+    <p className="word" aria-hidden="true">
       <span>EV</span>
-      <span data-part={slotPart} className="mx-[0.1em] inline-block h-[1cap] w-[1.5cap] align-baseline" />
+      <span className="word__slot" data-part={slotPart} />
       <span>LVE</span>
     </p>
   )
@@ -108,6 +102,7 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
                 } else {
                   drawEye(parts.eye, geo.almond, 1, geo.strokeWidth)
                 }
+                nav.dataset.on = photoOk ? 'photo' : 'ground'
                 gsap.to([parts.stage, nav, parts.tagline, parts.cue], {
                   autoAlpha: 1,
                   y: 0,
@@ -147,51 +142,42 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
   )
 
   return (
-    <section ref={heroRef} id="top" className="group relative h-lvh overflow-hidden bg-ground">
+    <section ref={heroRef} className="hero" id="top">
       <h1 className="sr-only">Evolve</h1>
-      <div data-part="stage" className="invisible absolute inset-0 text-fg opacity-0">
-        <div data-part="base-layer" className={layer}>
+      <div className="hero__stage" data-part="stage">
+        <div className="hero__layer" data-part="base-layer">
           <Word slotPart="slot" />
         </div>
-        <div data-part="light-layer" className={`${layer} hero-sweep invisible text-light`}>
+        <div className="hero__layer hero__layer--light" data-part="light-layer">
           <Word />
           <EyeIcon part="eye-light" />
         </div>
-        <div data-part="reveal" className="invisible absolute inset-0">
+        <div className="hero__reveal" data-part="reveal">
           <picture>
             <source srcSet={PHOTO.avif} type="image/avif" />
             <img
+              className="hero__photo"
               data-part="photo"
               src={PHOTO.webp}
               width={PHOTO.width}
               height={PHOTO.height}
               style={{ width: PHOTO.width, height: PHOTO.height }}
               alt=""
-              className="absolute top-0 left-0 max-w-none origin-top-left select-none"
             />
           </picture>
-          <div
-            data-part="dim"
-            className="invisible absolute top-0 left-0 box-content rounded-[50%] border-solid border-black/55"
-          />
-          <div className={`${layer} text-light`}>
+          <div className="hero__dim" data-part="dim" />
+          <div className="hero__layer">
             <Word />
           </div>
         </div>
         <EyeIcon part="eye" />
-        <div data-part="pupil-cover" className="absolute top-0 left-0 size-0 rounded-full bg-void opacity-0" />
+        <div className="hero__pupil-cover" data-part="pupil-cover" />
       </div>
-      <div data-part="void" className="pointer-events-none absolute inset-0 bg-void opacity-0" />
-      <p
-        data-part="tagline"
-        className="invisible absolute inset-x-0 top-[calc(50svh+var(--word-size,14vw)*0.55)] px-4 text-center font-mono text-[clamp(14px,1.3vw,19px)] text-light opacity-0 group-data-[photo=failed]:text-fg"
-      >
+      <div className="hero__void" data-part="void" />
+      <p className="hero__tagline" data-part="tagline">
         Birds never stopped being dinosaurs.
       </p>
-      <p
-        data-part="cue"
-        className="invisible absolute inset-x-0 bottom-[calc(100lvh-100svh+clamp(20px,4svh,40px))] px-4 text-center font-mono text-[clamp(11px,0.85vw,13px)] text-light opacity-0 group-data-[photo=failed]:text-fg"
-      >
+      <p className="hero__cue" data-part="cue">
         Scroll to look closer
       </p>
     </section>

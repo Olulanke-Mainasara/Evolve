@@ -1,6 +1,37 @@
-/* The only gradient on the page: a soft light band, used as a mask and never as a fill.
-   --sweep is driven by the intro timeline (100% = off the left edge, 0% = off the right). */
-.hero-sweep {
+/* Hero animation styles stay in plain CSS; the rest of the site uses Tailwind.
+   Colors and fonts come from the Tailwind theme variables in src/styles/app.css. */
+
+.hero {
+  position: relative;
+  height: 100lvh;
+  overflow: hidden;
+  background: var(--ground);
+}
+
+.hero__stage {
+  position: absolute;
+  inset: 0;
+  color: var(--fg);
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Word layers share one box (the small viewport) so the three copies align exactly. */
+.hero__layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+}
+
+.hero__layer--light {
+  color: var(--color-light);
+  visibility: hidden;
+  /* The only gradient on the page: a soft light band, used as a mask and never as a fill.
+     --sweep is driven by the intro timeline (100% = off the left edge, 0% = off the right). */
   -webkit-mask-image: linear-gradient(100deg, transparent 42%, #000 48%, #000 52%, transparent 58%);
   mask-image: linear-gradient(100deg, transparent 42%, #000 48%, #000 52%, transparent 58%);
   -webkit-mask-size: 250% 100%;
@@ -9,4 +40,122 @@
   mask-repeat: no-repeat;
   -webkit-mask-position: var(--sweep, 100%) 0;
   mask-position: var(--sweep, 100%) 0;
+}
+
+/* On the dark ground the band passes over the bone letters as a shadow instead of light. */
+[data-theme='dark'] .hero__layer--light {
+  color: var(--color-void);
+}
+
+.hero__reveal {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+}
+
+.hero__reveal .hero__layer {
+  color: var(--color-light);
+}
+
+.hero__photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  transform-origin: 0 0;
+  user-select: none;
+}
+
+/* Thick-bordered ellipse: the hole sits on the eye, the blurred border dims the rest of the photo.
+   Size, border width, blur and position are set from geometry in layout.ts. */
+.hero__dim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: content-box;
+  border: 0 solid rgb(0 0 0 / 0.68);
+  border-radius: 50%;
+  visibility: hidden;
+}
+
+.word {
+  position: relative;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--word-size, 14vw);
+  font-weight: 900;
+  font-stretch: 125%;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.word__slot {
+  display: inline-block;
+  width: 1.5cap;
+  height: 1cap;
+  margin-inline: 0.1em;
+  vertical-align: baseline;
+}
+
+.eye {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.hero__pupil-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: var(--color-void);
+  opacity: 0;
+}
+
+.hero__void {
+  position: absolute;
+  inset: 0;
+  background: var(--color-void);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.hero__tagline,
+.hero__cue {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding-inline: 16px;
+  text-align: center;
+  font-family: var(--font-mono);
+  color: var(--color-light);
+  visibility: hidden;
+  opacity: 0;
+}
+
+.hero[data-photo='failed'] :is(.hero__tagline, .hero__cue) {
+  color: var(--fg);
+}
+
+.hero__tagline {
+  top: calc(50svh + var(--word-size, 14vw) * 0.55);
+  font-size: clamp(14px, 1.3vw, 19px);
+}
+
+.hero__cue {
+  bottom: calc(100lvh - 100svh + clamp(20px, 4svh, 40px));
+  font-size: clamp(11px, 0.85vw, 13px);
 }

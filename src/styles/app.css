@@ -3,7 +3,8 @@
 /* dark: follows the site's theme toggle (html[data-theme]), not only the OS setting */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
-@theme {
+/* static: always emit these variables, because the hero's plain CSS (Hero.css) reads them directly */
+@theme static {
   --color-bone: #ede8dd;
   --color-ink: #0e0d0b;
   --color-void: #000000;
