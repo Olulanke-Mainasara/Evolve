@@ -1,0 +1,121 @@
+.impact {
+  padding-block: 0 clamp(96px, 18svh, 200px);
+}
+
+/* Pinned: one black viewport. The photo sits over everything, parked below until it rises. */
+.impact__pin {
+  position: relative;
+  overflow: hidden;
+  height: 100svh;
+  margin-inline: calc(var(--gutter-x) * -1);
+  padding: clamp(72px, 11svh, 112px) var(--gutter-x) 0;
+}
+
+.impact__grid {
+  height: 100%;
+  align-content: center;
+}
+
+.impact .chapter-header {
+  align-self: start;
+}
+
+.impact__number {
+  grid-column: 1 / span 7;
+  grid-row: 2 / span 2;
+  align-self: center;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(160px, 34vw, 540px);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  color: var(--accent);
+}
+
+.impact .impact__grid .chapter-text__headline {
+  grid-column: 8 / span 5;
+  grid-row: 2;
+  align-self: end;
+  font-size: clamp(32px, 4.2vw, 68px);
+}
+
+.impact .impact__grid .chapter-text__lede {
+  grid-column: 8 / span 5;
+  grid-row: 3;
+}
+
+.impact__photo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  margin: 0;
+  overflow: hidden;
+}
+
+.impact__photo-inner,
+.impact__photo-inner .photo,
+.impact__photo-inner picture {
+  display: block;
+  height: 100%;
+}
+
+.impact__photo-inner .photo__img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.impact__caption {
+  position: absolute;
+  left: var(--gutter-x);
+  bottom: var(--gutter-y);
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--void);
+  color: var(--bone);
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 0.9vw, 13px);
+}
+
+.impact__aftermath {
+  margin-top: clamp(160px, 36svh, 360px);
+}
+
+@media (max-width: 800px) {
+  .impact__number {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    font-size: 42vw;
+  }
+
+  .impact .impact__grid .chapter-text__headline,
+  .impact .impact__grid .chapter-text__lede {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .impact .impact__grid .chapter-text__lede {
+    margin-top: 16px;
+    font-size: 14px;
+  }
+}
+
+/* Nothing pins with reduced motion, so the photo drops into the flow below the text. */
+@media (prefers-reduced-motion: reduce) {
+  .impact__pin {
+    overflow: visible;
+    height: auto;
+    padding-bottom: 0;
+  }
+
+  .impact__photo {
+    position: relative;
+    margin-top: clamp(56px, 10svh, 120px);
+  }
+
+  .impact__photo-inner {
+    aspect-ratio: 3 / 2;
+  }
+}

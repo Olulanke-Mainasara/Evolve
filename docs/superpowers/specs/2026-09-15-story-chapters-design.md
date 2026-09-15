@@ -23,7 +23,7 @@ Seven scroll chapters after the hero's pupil dive that show birds are living din
 |---|---|---|
 | 01 | flows · black | Continues the pupil's black with no seam. Rule draws, headline lines rise, lede fades. Counter appears at 230. Ground shifts to theme as 02 arrives. |
 | 02 | **pinned** | Headline top-left; cladogram SVG across the lower two-thirds draws with scroll. Dinosaurs split into Stegosaurus's far branch and theropods, then T. rex and Velociraptor, ending in birds (orange). Mono tip labels, fact-checked. Counter 230 → 150. Lede lands when the bird branch completes. |
-| 03 | **pinned** | Slab photo right, text left. Text fades out, then the photo zooms from the whole slab into the wing, crossfading to `archaeopteryx-wing` so it stays sharp. Caption at the end. |
+| 03 | **pinned** | Slab photo right, text left. Text fades out, then the photo zooms from the whole slab into the wing and dissolves to `archaeopteryx-wing` (shot at a different angle, so a dissolve rather than a match) so it stays sharp. Caption at the end. |
 | 04 | flows | Layered: tall tail close-up in the right columns, framed holotype overlapping its lower-left edge. Different parallax speeds. Never shown larger than native resolution (both are under 1,500 px). |
 | 05 | flows | Headline large, three exhibits scattered around it (no grid): Mei long upper-right, Citipati lower-left, T. rex as a type-only exhibit in a rule frame. Photos drift at different speeds; counter 125 → 68. |
 | 06 | **pinned** · black | Hard cut to black. The corner counter hides; a separate full-size "66" fades in, orange. Headline and lede, then the boundary photo slides up full-bleed (transform-only mask). Then the `aftermath` beat fades back to the theme ground, text only. |
@@ -44,7 +44,7 @@ Seven scroll chapters after the hero's pupil dive that show birds are living din
 
 - `src/content/chapters.ts`: data (exists). `src/content/images.ts`: resolves `Photo.file` to the AVIF/WebP URLs in `src/assets/chapters/`.
 - `src/components/Chapter/`: `ChapterHeader` (rule + label row), `ChapterText` (headline + lede reveal), `Photo` (`<picture>` with lazy loading, caption).
-- One folder per chapter: `Origins`, `FamilyTree`, `Archaeopteryx`, `Feathers`, `Habits`, `Impact`, `StillHere`, plus `Footer`. Delete `ChapterStub`.
+- One folder per chapter: `Origins`, `FamilyTree`, `Archaeopteryx`, `Feathers`, `Habits`, `Impact`, `StillHere`, plus `Footer`, rendered in order in `App.tsx`. Each uses `Chapter/useChapter` (reveals, counter, ground, reduced-motion branch); pinned ones pass `tick: false` / `ground: false` and drive those in their own timeline.
 - `Backdrop` + `lib/ground.ts`: a fixed layer painted with `--ground`, with a black child whose opacity is scrubbed at black-ground boundaries (composited). Chapters tween the exported `ground` object, so mount order doesn't matter; ScrollTrigger updates set nav and counter `data-on`. `chapterScroll.ts` wires each chapter's counter ticks and ground change from `chapters.ts`.
 - `Counter` component plus `src/lib/counter.ts` controller (module-level, like `lib/smoothScroll.ts`): `show`, `hide`, `set`, and a scroll-driven tick from/to.
 - Images: originals from the Commons links in `chapters.ts`, converted with sharp installed outside the repo (as the hero photo was) to AVIF + WebP at two widths capped at native size. Crops are applied at conversion time.

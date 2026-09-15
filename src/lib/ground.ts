@@ -57,14 +57,13 @@ export function scrubGround(from: Ground, to: Ground, scrollTrigger: ScrollTrigg
   )
 }
 
-/** Flips the ground when a scroll position is crossed (reduced motion). */
-export function toggleGround(from: Ground, to: Ground, scrollTrigger: ScrollTrigger.Vars): ScrollTrigger {
+/** Flips the ground when a scroll position is crossed: a short fade, or a hard cut with `duration: 0`. */
+export function toggleGround(from: Ground, to: Ground, scrollTrigger: ScrollTrigger.Vars, duration = 0.4): ScrollTrigger {
   const go = (value: Ground) => {
     gsap.to(ground, {
       black: amount(value),
-      duration: 0.4,
+      duration,
       ease: 'power1.inOut',
-      overwrite: true,
       onUpdate: renderGround,
       onComplete: syncGroundFollowers,
     })

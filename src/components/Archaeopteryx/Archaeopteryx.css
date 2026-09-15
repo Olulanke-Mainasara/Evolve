@@ -1,0 +1,119 @@
+/* Pinned: one viewport, text on the left, the slab framed on the right. */
+.archaeopteryx {
+  --frame-top: 11svh;
+  --frame-height: 72svh;
+  --frame-ratio: calc(3926 / 4691);
+
+  overflow: hidden;
+  height: 100svh;
+  padding-block: clamp(72px, 11svh, 112px) 0;
+}
+
+.archaeopteryx__text {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  align-content: center;
+}
+
+.archaeopteryx__text .chapter-header {
+  align-self: start;
+}
+
+.archaeopteryx .chapter-text__headline {
+  grid-column: 1 / span 6;
+  font-size: clamp(34px, 5vw, 84px);
+}
+
+.archaeopteryx .chapter-text__lede {
+  grid-column: 1 / span 5;
+}
+
+.archaeopteryx__frame {
+  position: absolute;
+  top: var(--frame-top);
+  right: var(--gutter-x);
+  width: calc(var(--frame-height) * var(--frame-ratio));
+  height: var(--frame-height);
+  overflow: hidden;
+}
+
+.archaeopteryx__frame .photo,
+.archaeopteryx__frame picture {
+  display: block;
+  height: 100%;
+}
+
+.archaeopteryx__frame .photo__img {
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The close-up waits, full-bleed, for the dissolve at the end of the zoom. */
+.archaeopteryx__wing {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.archaeopteryx__wing .photo,
+.archaeopteryx__wing picture {
+  display: block;
+  height: 100%;
+}
+
+.archaeopteryx__wing .photo__img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.archaeopteryx__caption {
+  position: absolute;
+  left: var(--gutter-x);
+  bottom: var(--gutter-y);
+  z-index: 3;
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--ground);
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 0.9vw, 13px);
+}
+
+@media (max-width: 800px) {
+  .archaeopteryx {
+    --frame-top: 58svh;
+    --frame-height: 36svh;
+  }
+
+  .archaeopteryx__text {
+    align-content: start;
+  }
+
+  .archaeopteryx .chapter-text__headline,
+  .archaeopteryx .chapter-text__lede {
+    grid-column: 1 / -1;
+  }
+
+  .archaeopteryx .chapter-text__headline {
+    font-size: 30px;
+  }
+
+  .archaeopteryx .chapter-text__lede {
+    margin-top: 16px;
+    font-size: 13.5px;
+  }
+
+  .archaeopteryx__frame {
+    right: auto;
+    left: calc(50% - var(--frame-height) * var(--frame-ratio) / 2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .archaeopteryx__wing {
+    display: none;
+  }
+}

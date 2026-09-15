@@ -1,0 +1,86 @@
+/* Pinned for its whole scroll, so everything fits one viewport. Bottom padding clears the counter. */
+.family-tree {
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+  padding-block: clamp(72px, 11svh, 112px) clamp(112px, 17svh, 156px);
+}
+
+.family-tree .chapter-header {
+  margin-bottom: clamp(24px, 4svh, 48px);
+}
+
+.family-tree .chapter-text__headline {
+  grid-column: 1 / span 8;
+  font-size: clamp(32px, 4.6vw, 76px);
+}
+
+.family-tree .chapter-text__lede {
+  grid-column: 9 / span 4;
+  align-self: end;
+  margin-top: 0;
+}
+
+.tree {
+  position: relative;
+  flex: 1;
+  min-height: 200px;
+  margin-top: clamp(28px, 6svh, 72px);
+}
+
+/* Every line is a flat bar that scales out from its node, so drawing is transform-only. */
+.tree__line {
+  position: absolute;
+  background: currentColor;
+}
+
+.tree__line--x {
+  height: 2px;
+  margin-top: -1px;
+}
+
+.tree__line--y {
+  width: 2px;
+  margin-left: -1px;
+}
+
+.tree__line--lineage {
+  background: var(--accent);
+}
+
+.tree__line--x.tree__line--lineage {
+  height: 3px;
+  margin-top: -1.5px;
+}
+
+.tree__line--y.tree__line--lineage {
+  width: 3px;
+  margin-left: -1.5px;
+}
+
+.tree__label {
+  position: absolute;
+  padding-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: clamp(12px, 1vw, 15px);
+  line-height: 1;
+  white-space: nowrap;
+  translate: 0 -100%;
+}
+
+.tree__label--lineage {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+@media (max-width: 800px) {
+  .family-tree .chapter-text__headline,
+  .family-tree .chapter-text__lede {
+    grid-column: 1 / -1;
+  }
+
+  .family-tree .chapter-text__lede {
+    margin-top: 16px;
+    font-size: 14px;
+  }
+}

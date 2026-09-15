@@ -94,58 +94,9 @@
   line-height: 1.5;
 }
 
-/* Plain layout used by ChapterSection until each chapter has its own component. */
-.chapter__media {
-  row-gap: 48px;
-  margin-top: clamp(56px, 10svh, 120px);
-}
-
-.chapter__media > .photo {
-  grid-column: span 6;
-}
-
-.chapter__media > .photo:only-child {
-  grid-column: 3 / span 8;
-}
-
-.chapter__exhibit {
-  grid-column: span 4;
-}
-
-.chapter__exhibit-title {
-  margin: 20px 0 8px;
-  font-family: var(--font-mono);
-  font-size: 15px;
-  font-weight: 500;
-}
-
-.chapter__exhibit-text {
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.chapter__aftermath {
-  margin-top: clamp(120px, 30svh, 320px);
-}
-
-.chapter__closing {
-  margin: clamp(80px, 16svh, 180px) 0 0;
-  font-family: var(--font-display);
-  font-size: clamp(40px, 7.5vw, 128px);
-  font-weight: 800;
-  font-stretch: 112.5%;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-}
-
 @media (max-width: 800px) {
   .chapter-text__headline,
-  .chapter-text__lede,
-  .chapter__media > .photo,
-  .chapter__media > .photo:only-child,
-  .chapter__exhibit {
+  .chapter-text__lede {
     grid-column: 1 / -1;
   }
 }

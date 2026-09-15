@@ -1,6 +1,6 @@
 import type { RefObject } from 'react'
 import { gsap, useGSAP } from '../../lib/gsap'
-import { chapterScroll } from './chapterScroll'
+import { chapterScroll, type ChapterScrollOptions } from './chapterScroll'
 import { revealText } from './reveal'
 
 /** Returns an optional cleanup for anything GSAP doesn't revert (observers, listeners). */
@@ -10,7 +10,12 @@ type Setup = (section: HTMLElement, reduce: boolean) => void | (() => void)
  * Motion every chapter shares: text reveals for each [data-beat], counter ticks and ground
  * changes. `setup` adds the chapter's own motion inside the same reduced-motion branch.
  */
-export function useChapter(ref: RefObject<HTMLElement | null>, index: number, setup?: Setup): void {
+export function useChapter(
+  ref: RefObject<HTMLElement | null>,
+  index: number,
+  setup?: Setup,
+  options: Omit<ChapterScrollOptions, 'reduce'> = {},
+): void {
   useGSAP(
     () => {
       const section = ref.current
@@ -23,7 +28,7 @@ export function useChapter(ref: RefObject<HTMLElement | null>, index: number, se
           for (const beat of gsap.utils.toArray<HTMLElement>('[data-beat]', section)) {
             revealText(beat, beat, { reduce })
           }
-          chapterScroll(section, index, { reduce })
+          chapterScroll(section, index, { ...options, reduce })
           return setup?.(section, reduce)
         },
       )
