@@ -9,6 +9,7 @@
 
 .footer__word {
   position: relative;
+  width: max-content;
   margin: 0;
   font-family: var(--font-display);
   font-size: var(--word-size, 20vw);
@@ -18,6 +19,11 @@
   letter-spacing: -0.01em;
   white-space: nowrap;
   user-select: none;
+}
+
+/* Phones split the wordmark after the eye: "EV◯" over "LVE". */
+.footer__break {
+  display: none;
 }
 
 .footer__slot {
@@ -97,6 +103,16 @@
   color: inherit;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.25em;
+}
+
+@media (max-width: 640px) {
+  .footer__word {
+    line-height: 0.88;
+  }
+
+  .footer__break {
+    display: block;
+  }
 }
 
 @media (max-width: 800px) {

@@ -82,8 +82,9 @@ export const CHAPTERS: Chapter[] = [
     sources: [
       { label: 'ScienceDaily: T. rex bone tissue (theropods include birds)', url: 'https://www.sciencedaily.com/releases/2005/06/050602173113.htm' },
       { label: 'Scientific American: Meet the maniraptorans (birds, dromaeosaurs and troodontids form Paraves)', url: 'https://www.scientificamerican.com/blog/tetrapod-zoology/the-integrated-maniraptoran-part-2-meet-the-maniraptorans/' },
-      // Popular source for the T. rex / Stegosaurus time gap; replace with a museum page before launch.
-      { label: 'Discovery: The Stegosaurus was an ancient relic to the T. rex', url: 'https://www.discovery.com/nature/Stegosaurus-Was-An-Ancient-Relic-TRex' },
+      // The time gap: Stegosaurus about 150 million years ago, T. rex 68 to 66 million years ago.
+      { label: 'Natural History Museum: A Stegosaurus brought to life', url: 'https://www.nhm.ac.uk/discover/stegosaurus-brought-to-life.html' },
+      { label: 'Australian Museum: Tyrannosaurus rex', url: 'https://australian.museum/learn/dinosaurs/fact-sheets/tyrannosaurus-rex/' },
     ],
   },
   {

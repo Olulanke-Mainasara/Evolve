@@ -34,7 +34,13 @@ export function StillHere() {
     document.fonts.ready.then(() => {
       if (active) fit()
     })
-    const observer = new ResizeObserver(fit)
+    // Only width changes matter; the height changes every time fit() resizes the text.
+    let width = 0
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry.contentRect.width === width) return
+      width = entry.contentRect.width
+      fit()
+    })
     observer.observe(closing)
 
     const scrollTrigger = { trigger: closing, start: 'top 75%', toggleActions: 'play none none reverse' }

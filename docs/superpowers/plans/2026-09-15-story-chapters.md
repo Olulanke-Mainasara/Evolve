@@ -37,5 +37,5 @@ Work directly (no subagent review pipeline), no tests. Before each commit, run `
 - [ ] Reduced motion: no pins or scrubs, fades only, static counter values
 - [ ] Phones (~390 px): stacked grid, shorter pin distances, counter bottom-left
 - [ ] Performance: no large text scaling, no filters on scaled layers; confirm smooth scroll in Chrome with the user
-- [ ] Replace the Discovery source in chapter 02 with a museum page
+- [x] Replace the Discovery source in chapter 02 with museum pages (NHM Stegosaurus, Australian Museum T. rex)
 - [ ] Commit; update the spec's status line if anything changed

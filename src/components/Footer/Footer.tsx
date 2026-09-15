@@ -31,7 +31,8 @@ export function Footer() {
       const pupil = eye?.querySelector('circle')
       if (!footer || !mark || !word || !slot || !eye || !pupil) return
 
-      // Same construction as the hero: the word spans the width, the eye is drawn in the O's slot.
+      // Same construction as the hero: the word (its widest line, on phones) spans the width and
+      // the eye is drawn in the O's slot. The word is max-content wide, so offsetWidth is the text.
       const layout = () => {
         mark.style.setProperty('--word-size', '100px')
         const size = fitWordFontSize({ width: mark.clientWidth, height: Infinity }, word.offsetWidth, slot.offsetHeight, 1)
@@ -54,7 +55,13 @@ export function Footer() {
       document.fonts.ready.then(() => {
         if (active) layout()
       })
-      const observer = new ResizeObserver(layout)
+      // Only width changes matter; the height changes every time layout() resizes the word.
+      let width = 0
+      const observer = new ResizeObserver(([entry]) => {
+        if (entry.contentRect.width === width) return
+        width = entry.contentRect.width
+        layout()
+      })
       observer.observe(mark)
 
       ScrollTrigger.create({
@@ -78,6 +85,7 @@ export function Footer() {
         <p className="footer__word">
           <span>EV</span>
           <span className="footer__slot" />
+          <span className="footer__break" />
           <span>LVE</span>
         </p>
         <svg className="footer__eye" focusable="false">
