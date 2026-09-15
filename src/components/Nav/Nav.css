@@ -5,7 +5,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: clamp(16px, 2.4vw, 32px) clamp(16px, 3vw, 44px);
+  padding: var(--gutter-y) var(--gutter-x);
   font-family: var(--font-mono);
   font-size: clamp(13px, 1vw, 15px);
   color: var(--fg);

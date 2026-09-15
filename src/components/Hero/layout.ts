@@ -4,6 +4,7 @@ import {
   diveEndScale,
   fitToSlot,
   fitWordFontSize,
+  spotlightClearScale,
   spotlightRing,
   type Almond,
   type PhotoTransform,
@@ -22,6 +23,7 @@ export interface HeroParts {
   baseLayer: HTMLElement;
   lightLayer: HTMLElement;
   reveal: HTMLElement;
+  revealLayer: HTMLElement;
   photo: HTMLImageElement;
   dim: HTMLElement;
   eye: SVGSVGElement;
@@ -43,6 +45,8 @@ export interface HeroGeometry {
   clipCoverScale: number;
   /** Dimming ring placed for the cover transform. */
   spotlight: SpotlightRing;
+  /** Dive scale past which the dimming ring is entirely off screen. */
+  spotlightClearScale: number;
   pupilRadius: number;
   diveScale: number;
 }
@@ -60,6 +64,7 @@ export function collectParts(hero: HTMLElement): HeroParts {
     baseLayer: part("base-layer"),
     lightLayer: part("light-layer"),
     reveal: part("reveal"),
+    revealLayer: part("reveal-layer"),
     photo: part<HTMLImageElement>("photo"),
     dim: part("dim"),
     eye: part<SVGSVGElement>("eye"),
@@ -112,6 +117,7 @@ export function measureHero(parts: HeroParts): HeroGeometry {
   };
   const center = { x: almond.cx, y: almond.cy };
   const cover = coverAnchored(viewport, center, PHOTO);
+  const spotlight = spotlightRing(viewport, PHOTO, cover);
   const pupilRadius = PHOTO.pupil.r * cover.scale;
 
   return {
@@ -121,7 +127,8 @@ export function measureHero(parts: HeroParts): HeroGeometry {
     fit: fitToSlot(almond, PHOTO),
     cover,
     clipCoverScale: almondCoverScale(viewport, almond),
-    spotlight: spotlightRing(viewport, PHOTO, cover),
+    spotlight,
+    spotlightClearScale: spotlightClearScale(viewport, center, spotlight),
     pupilRadius,
     diveScale: diveEndScale(viewport, center, pupilRadius),
   };
@@ -149,6 +156,8 @@ export function applyRevealedState(parts: HeroParts, geo: HeroGeometry): void {
   setPhotoTransform(parts.photo, geo.cover);
   setSpotlight(parts.dim, geo.spotlight);
   parts.reveal.style.clipPath = "none";
+  // The photo covers the base word from here on; hiding it keeps a second copy of the text out of the dive's redraws.
+  parts.baseLayer.style.visibility = "hidden";
   const r = geo.pupilRadius;
   parts.pupilCover.style.width = `${r * 2}px`;
   parts.pupilCover.style.height = `${r * 2}px`;

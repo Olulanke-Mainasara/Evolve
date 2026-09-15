@@ -227,3 +227,37 @@ export function spotlightRing(
   const border = farthest + blur * 3
   return { left: cx - rx - border, top: cy - ry - border, width: rx * 2, height: ry * 2, border, blur, rotation: spot.rotation }
 }
+
+/**
+ * Stage scale around `anchor` past which the ring's hole, shrunk by `falloffSigmas` of its blur,
+ * contains every viewport corner, so no dimming is left on screen. Infinity if the anchor is
+ * outside that clear area.
+ */
+export function spotlightClearScale(viewport: Size, anchor: Point, ring: SpotlightRing, falloffSigmas = 3): number {
+  const a = ring.width / 2 - ring.blur * falloffSigmas
+  const b = ring.height / 2 - ring.blur * falloffSigmas
+  if (a <= 0 || b <= 0) return Infinity
+  const angle = radians(ring.rotation)
+  // Offset from the ellipse center in its own frame, normalized so the clear edge is the unit circle
+  const local = (dx: number, dy: number): Point => ({
+    x: (dx * Math.cos(angle) + dy * Math.sin(angle)) / a,
+    y: (-dx * Math.sin(angle) + dy * Math.cos(angle)) / b,
+  })
+  const center = local(
+    anchor.x - (ring.left + ring.border + ring.width / 2),
+    anchor.y - (ring.top + ring.border + ring.height / 2),
+  )
+  const anchorDistance = center.x ** 2 + center.y ** 2
+  if (anchorDistance >= 1) return Infinity
+
+  // Scaling by s around the anchor puts corner offset d at anchor + d / s in the unscaled ellipse,
+  // so solve |center + t·d|² = 1 for the largest t = 1 / s.
+  return corners(viewport).reduce((scale, c) => {
+    const d = local(c.x - anchor.x, c.y - anchor.y)
+    const dd = d.x ** 2 + d.y ** 2
+    if (dd === 0) return scale
+    const dc = d.x * center.x + d.y * center.y
+    const t = (-dc + Math.sqrt(dc ** 2 - dd * (anchorDistance - 1))) / dd
+    return Math.max(scale, 1 / t)
+  }, 1)
+}

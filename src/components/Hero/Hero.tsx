@@ -166,7 +166,7 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
             />
           </picture>
           <div className="hero__dim" data-part="dim" />
-          <div className="hero__layer">
+          <div className="hero__layer" data-part="reveal-layer">
             <Word />
           </div>
         </div>
@@ -174,12 +174,14 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
         <div className="hero__pupil-cover" data-part="pupil-cover" />
       </div>
       <div className="hero__void" data-part="void" />
-      <p className="hero__tagline" data-part="tagline">
-        Birds never stopped being dinosaurs.
-      </p>
-      <p className="hero__cue" data-part="cue">
-        Scroll to look closer
-      </p>
+      <div className="hero__foot">
+        <p className="hero__tagline" data-part="tagline">
+          Birds never stopped being dinosaurs.
+        </p>
+        <p className="hero__cue" data-part="cue">
+          Scroll to look closer
+        </p>
+      </div>
     </section>
   )
 }

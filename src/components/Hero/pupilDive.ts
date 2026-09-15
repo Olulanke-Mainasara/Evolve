@@ -27,11 +27,14 @@ export function createPupilDive(
   const render = () => {
     if (mode !== 'zoom') return
     const geo = getGeo()
+    const scale = logLerp(1, geo.diveScale, state.zoom)
     gsap.set(parts.stage, {
-      scale: logLerp(1, geo.diveScale, state.zoom),
+      scale,
       transformOrigin: `${geo.almond.cx}px ${geo.almond.cy}px`,
       force3D: true,
     })
+    // Once the ring is off screen, hiding it spares Chrome re-blurring it at every new scale.
+    gsap.set(parts.dim, { autoAlpha: scale < geo.spotlightClearScale ? 1 : 0 })
   }
 
   const timeline = gsap.timeline({
@@ -54,6 +57,8 @@ export function createPupilDive(
   if (mode === 'zoom') {
     timeline
       .to(state, { zoom: 1, duration: 1, ease: 'power2.in', onUpdate: render }, 0)
+      // Gone before the zoom passes ~2×: letters re-rasterized at every larger scale flicker.
+      .to(parts.revealLayer, { autoAlpha: 0, duration: 0.35 }, 0.2)
       // Solid black over the upscaled pupil so the last frames stay crisp.
       .to(parts.pupilCover, { opacity: 1, duration: 0.34 }, 0.66)
   } else {

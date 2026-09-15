@@ -10,6 +10,10 @@
   --font-display: 'Archivo Variable', 'Arial Black', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
+  /* Page-edge gutters shared by the nav and the hero's corner text */
+  --gutter-x: clamp(16px, 3vw, 44px);
+  --gutter-y: clamp(16px, 2.4vw, 32px);
+
   color-scheme: light;
 }
 
