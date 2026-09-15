@@ -8,6 +8,8 @@ export interface Source {
 export interface Photo {
   /** Basename in src/assets/chapters/ (converted to .avif and .webp). */
   file: string
+  /** Short name for the credits list. */
+  title: string
   alt: string
   caption?: string
   credit: string
@@ -95,6 +97,7 @@ export const CHAPTERS: Chapter[] = [
     photos: [
       {
         file: 'archaeopteryx-berlin',
+        title: 'Archaeopteryx, Berlin specimen',
         alt: 'The Berlin Archaeopteryx fossil: a bird-like skeleton with outspread feathered wings pressed into pale limestone',
         caption: 'The Berlin specimen, found in the 1870s.',
         credit: 'Emily Willoughby',
@@ -104,6 +107,7 @@ export const CHAPTERS: Chapter[] = [
       },
       {
         file: 'archaeopteryx-wing',
+        title: 'Archaeopteryx wing detail',
         alt: 'Close-up of an Archaeopteryx wing, each flight feather printed in the stone',
         credit: 'Emily Willoughby',
         ...CC_BY_SA_4,
@@ -128,6 +132,7 @@ export const CHAPTERS: Chapter[] = [
     photos: [
       {
         file: 'sinosauropteryx-tail',
+        title: 'Sinosauropteryx tail plumage',
         alt: 'Close-up of a fossil tail with dark bands of preserved feather pigment along the bones',
         caption: 'Its tail, banded with pigment.',
         credit: 'Fiann M. Smithwick, Robert Nicholls, Innes C. Cuthill and Jakob Vinther',
@@ -137,6 +142,7 @@ export const CHAPTERS: Chapter[] = [
       },
       {
         file: 'sinosauropteryx-holotype',
+        title: 'Sinosauropteryx holotype',
         alt: 'The Sinosauropteryx fossil: a small curled skeleton with a fringe of fuzz along its neck and back',
         caption: 'Sinosauropteryx, the original fossil.',
         credit: 'James St. John',
@@ -167,6 +173,7 @@ export const CHAPTERS: Chapter[] = [
         text: 'Curled up asleep with its head tucked in, like a roosting bird. The name means “soundly sleeping dragon”.',
         photo: {
           file: 'mei-long',
+          title: 'Mei long holotype',
           alt: 'The Mei long fossil: a small skeleton curled into a tight ball, tail wrapped around its body',
           credit: '纳瓦拉的亨利',
           ...CC_BY_SA_4,
@@ -179,6 +186,7 @@ export const CHAPTERS: Chapter[] = [
         text: 'Found in 1993, sitting on her nest with her arms spread over the eggs, the way birds brood.',
         photo: {
           file: 'citipati-big-mama',
+          title: 'Citipati “Big Mama”',
           alt: 'The Citipati fossil sitting on a ring of elongated eggs, its arm bones spread around them',
           credit: 'Jonathan Chen',
           ...CC_BY_SA_4,
@@ -209,6 +217,7 @@ export const CHAPTERS: Chapter[] = [
     photos: [
       {
         file: 'kpg-boundary-colorado',
+        title: 'Cretaceous–Paleogene boundary, Colorado',
         alt: 'A rock face cut by a dark band of sediment beneath pale sandstone',
         caption: 'The Cretaceous–Paleogene boundary at Trinidad Lake State Park, Colorado.',
         credit: 'Jeffrey Beall',
@@ -240,6 +249,7 @@ export const CHAPTERS: Chapter[] = [
     photos: [
       {
         file: 'cassowary',
+        title: 'Southern cassowary',
         alt: 'A southern cassowary: tall horned casque, bright blue neck, red wattles and an orange eye',
         caption: 'A southern cassowary in Papua New Guinea.',
         credit: 'Nick Hobgood',
@@ -249,6 +259,7 @@ export const CHAPTERS: Chapter[] = [
       },
       {
         file: 'pigeon-peeking',
+        title: 'Rock dove',
         alt: 'A grey pigeon peeking over a rock ledge, one red-ringed eye looking straight out',
         credit: 'Manjunath HN',
         ...CC_BY_SA_4,

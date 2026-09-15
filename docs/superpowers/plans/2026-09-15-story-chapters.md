@@ -7,13 +7,14 @@ Work directly (no subagent review pipeline), no tests. Before each commit, run `
 ## Phase 1: Foundation
 
 - [x] Content file `src/content/chapters.ts` (copy, credits, sources)
-- [ ] Images: download originals, crop `sinosauropteryx-tail` to panel B (drop panel letters and scale bars), convert to AVIF + WebP at two widths into `src/assets/chapters/`; add `src/content/images.ts`
-- [ ] Sample the iris orange from `src/assets/eye.png`; add `--accent` (and a `--rule` hairline colour for both themes) to `tokens.css`
-- [ ] `Backdrop` (ground + scrubbed black layer + nav `data-on`); replace the hero's `void` handoff and delete `ChapterStub`
-- [ ] `Counter` + `lib/counter.ts` (show, hide, set, tick; tabular digits; bottom-left on phones)
-- [ ] Shared `ChapterHeader`, `ChapterText` (check the SplitText docs for line splitting and resize re-split), `Photo`
-- [ ] `Footer`: eye-O wordmark (reuse `drawEye`/geometry), sources and credits generated from `chapters.ts`
-- [ ] Commit
+- [x] Images: download originals, crop `sinosauropteryx-tail` to panel B (drop panel letters and scale bars), convert to AVIF + WebP at two widths into `src/assets/chapters/`; add `src/content/images.ts`
+- [x] Sample the iris orange from `src/assets/eye.png`; add `--amber`, `--rust`, `--accent` to `tokens.css` (hairlines use `currentColor` at 30%)
+- [x] `Backdrop` + `lib/ground.ts` (ground + scrubbed black layer + nav/counter `data-on`); delete `ChapterStub`
+- [x] `Counter` + `lib/counter.ts` (show, hide, set, tick; tabular digits; bottom-left on phones)
+- [x] Shared `ChapterHeader`, `ChapterText`, `Photo`, `reveal.ts` (SplitText lines, autoSplit), `chapterScroll.ts` (counter ticks + ground changes per chapter)
+- [x] Interim `ChapterSection` renders every chapter plainly from data; each bespoke component below replaces it for its chapter in `App.tsx`
+- [x] `Footer`: eye-O wordmark (reuse `drawEye`/geometry), sources and credits generated from `chapters.ts`
+- [x] Commit
 
 ## Phase 2: Flowing chapters
 

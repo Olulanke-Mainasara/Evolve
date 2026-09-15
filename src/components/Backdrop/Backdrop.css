@@ -1,0 +1,15 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--ground);
+  pointer-events: none;
+}
+
+/* Only its opacity changes, so the browser can fade it without repainting. */
+.backdrop__black {
+  position: absolute;
+  inset: 0;
+  background: var(--void);
+  will-change: opacity;
+}

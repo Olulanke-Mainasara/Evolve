@@ -45,6 +45,6 @@ Seven scroll chapters after the hero's pupil dive that show birds are living din
 - `src/content/chapters.ts`: data (exists). `src/content/images.ts`: resolves `Photo.file` to the AVIF/WebP URLs in `src/assets/chapters/`.
 - `src/components/Chapter/`: `ChapterHeader` (rule + label row), `ChapterText` (headline + lede reveal), `Photo` (`<picture>` with lazy loading, caption).
 - One folder per chapter: `Origins`, `FamilyTree`, `Archaeopteryx`, `Feathers`, `Habits`, `Impact`, `StillHere`, plus `Footer`. Delete `ChapterStub`.
-- `Backdrop`: a fixed layer painted with `--ground`, with a black child whose opacity is scrubbed at black-ground boundaries (composited). It also drives nav `data-on`.
+- `Backdrop` + `lib/ground.ts`: a fixed layer painted with `--ground`, with a black child whose opacity is scrubbed at black-ground boundaries (composited). Chapters tween the exported `ground` object, so mount order doesn't matter; ScrollTrigger updates set nav and counter `data-on`. `chapterScroll.ts` wires each chapter's counter ticks and ground change from `chapters.ts`.
 - `Counter` component plus `src/lib/counter.ts` controller (module-level, like `lib/smoothScroll.ts`): `show`, `hide`, `set`, and a scroll-driven tick from/to.
 - Images: originals from the Commons links in `chapters.ts`, converted with sharp installed outside the repo (as the hero photo was) to AVIF + WebP at two widths capped at native size. Crops are applied at conversion time.

@@ -3,9 +3,13 @@
   --ink: #0e0d0b;
   --void: #000000;
   --light: #ffffff;
+  /* Sampled from the hero iris: amber reads on dark grounds, rust keeps contrast on bone */
+  --amber: #f29107;
+  --rust: #b35507;
 
   --ground: var(--bone);
   --fg: var(--ink);
+  --accent: var(--rust);
 
   --font-display: 'Archivo Variable', 'Arial Black', system-ui, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -22,6 +26,7 @@
   :root:not([data-theme='light']) {
     --ground: var(--ink);
     --fg: var(--bone);
+    --accent: var(--amber);
     color-scheme: dark;
   }
 }
@@ -29,5 +34,6 @@
 :root[data-theme='dark'] {
   --ground: var(--ink);
   --fg: var(--bone);
+  --accent: var(--amber);
   color-scheme: dark;
 }
