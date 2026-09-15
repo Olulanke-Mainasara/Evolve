@@ -100,3 +100,13 @@
     grid-column: 1 / -1;
   }
 }
+
+@media (max-width: 640px) {
+  .chapter-header__labels {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .chapter-header__labels > :nth-child(2) {
+    text-align: left;
+  }
+}

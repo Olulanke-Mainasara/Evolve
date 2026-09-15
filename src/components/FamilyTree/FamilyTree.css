@@ -74,13 +74,59 @@
 }
 
 @media (max-width: 800px) {
+  .family-tree {
+    padding-bottom: 72px;
+  }
+
+  .family-tree .chapter-header {
+    margin-bottom: 16px;
+  }
+
   .family-tree .chapter-text__headline,
   .family-tree .chapter-text__lede {
     grid-column: 1 / -1;
   }
 
+  .family-tree .chapter-text__headline {
+    font-size: 28px;
+  }
+
   .family-tree .chapter-text__lede {
     margin-top: 16px;
     font-size: 14px;
+  }
+
+  .tree {
+    min-height: 160px;
+    margin-top: 24px;
+  }
+
+  .tree__label {
+    font-size: 11px;
+  }
+}
+
+/* Pinned phones: the lede replaces the headline in the same cell, so the tree keeps its room. */
+@media (max-width: 800px) and (prefers-reduced-motion: no-preference) {
+  .family-tree .chapter-text__headline,
+  .family-tree .chapter-text__lede {
+    grid-row: 2;
+    align-self: start;
+  }
+
+  .family-tree .chapter-text__lede {
+    margin-top: 0;
+  }
+}
+
+/* Nothing pins, so the section grows with its content and the tree gets a fixed height. */
+@media (prefers-reduced-motion: reduce) {
+  .family-tree {
+    height: auto;
+  }
+
+  .tree {
+    flex: none;
+    height: clamp(260px, 55svh, 560px);
   }
 }

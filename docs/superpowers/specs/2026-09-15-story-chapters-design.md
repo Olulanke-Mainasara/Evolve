@@ -1,6 +1,6 @@
 # Story chapters: design
 
-**Status:** approved 2026-09-15 · sub-project 2 of 2 (sub-project 1 is the hero: `2026-09-14-hero-pupil-dive-design.md`)
+**Status:** built 2026-09-15, awaiting the user's browser check · sub-project 2 of 2 (sub-project 1 is the hero: `2026-09-14-hero-pupil-dive-design.md`)
 **Plan:** `../plans/2026-09-15-story-chapters.md`
 
 ## What

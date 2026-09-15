@@ -31,10 +31,10 @@ interface Step {
 }
 
 const STEPS: Step[] = [
-  { lines: [{ axis: 'x', at: 50, from: 0, to: 14, lineage: true }], label: { text: 'Dinosaurs', x: 0, y: 50, align: 'start' } },
-  { lines: [{ axis: 'y', at: 14, from: 50, to: 16 }, { axis: 'y', at: 14, from: 50, to: 64, lineage: true }] },
-  { lines: [{ axis: 'x', at: 16, from: 14, to: 100 }], label: { text: 'Stegosaurus', x: 100, y: 16, align: 'end' } },
-  { lines: [{ axis: 'x', at: 64, from: 14, to: 40, lineage: true }], label: { text: 'Theropods', x: 15, y: 64, align: 'start' } },
+  { lines: [{ axis: 'x', at: 50, from: 0, to: 18, lineage: true }], label: { text: 'Dinosaurs', x: 0, y: 50, align: 'start' } },
+  { lines: [{ axis: 'y', at: 18, from: 50, to: 16 }, { axis: 'y', at: 18, from: 50, to: 64, lineage: true }] },
+  { lines: [{ axis: 'x', at: 16, from: 18, to: 100 }], label: { text: 'Stegosaurus', x: 100, y: 16, align: 'end' } },
+  { lines: [{ axis: 'x', at: 64, from: 18, to: 40, lineage: true }], label: { text: 'Theropods', x: 19, y: 64, align: 'start' } },
   { lines: [{ axis: 'y', at: 40, from: 64, to: 44 }, { axis: 'y', at: 40, from: 64, to: 80, lineage: true }] },
   { lines: [{ axis: 'x', at: 44, from: 40, to: 100 }], label: { text: 'T. rex', x: 100, y: 44, align: 'end' } },
   { lines: [{ axis: 'x', at: 80, from: 40, to: 68, lineage: true }] },
@@ -48,8 +48,6 @@ const lineStyle = ({ axis, at, from, to }: Line) =>
     ? { top: `${at}%`, left: `${Math.min(from, to)}%`, width: `${Math.abs(to - from)}%` }
     : { left: `${at}%`, top: `${Math.min(from, to)}%`, height: `${Math.abs(to - from)}%` }
 
-const isPhone = () => window.matchMedia('(max-width: 800px)').matches
-
 /** 02: pinned; scrolling draws the tree from the first dinosaurs out to birds. */
 export function FamilyTree() {
   const ref = useRef<HTMLElement>(null)
@@ -58,9 +56,10 @@ export function FamilyTree() {
   useChapter(
     ref,
     index,
-    (section, reduce) => {
+    (section, reduce, phone) => {
       if (reduce) return
       const steps = gsap.utils.toArray<HTMLElement>('.tree__step', section)
+      const headline = section.querySelector('.chapter-text__headline')
       const lede = section.querySelector('.chapter-text__lede')
 
       const timeline = gsap.timeline({
@@ -68,7 +67,7 @@ export function FamilyTree() {
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: () => `+=${isPhone() ? 140 : 220}%`,
+          end: `+=${phone ? 140 : 220}%`,
           pin: true,
           scrub: true,
           invalidateOnRefresh: true,
@@ -88,8 +87,11 @@ export function FamilyTree() {
         if (label) timeline.fromTo(label, { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.08 }, '<50%')
       })
 
+      // Phones stack the lede in the headline's place (see the CSS), so the headline makes way.
+      const ledeAt = timeline.duration()
+      if (phone) timeline.to(headline, { autoAlpha: 0, y: -16, duration: 0.1 }, ledeAt)
       timeline
-        .fromTo(lede, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.12 })
+        .fromTo(lede, { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.12 }, ledeAt)
         .to({}, { duration: 0.15 })
         .fromTo(
           counter,

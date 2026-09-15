@@ -84,8 +84,8 @@
 
 @media (max-width: 800px) {
   .archaeopteryx {
-    --frame-top: 58svh;
-    --frame-height: 36svh;
+    --frame-top: 44svh;
+    --frame-height: 38svh;
   }
 
   .archaeopteryx__text {
@@ -112,8 +112,61 @@
   }
 }
 
+/* Pinned phones: the lede replaces the headline in the same cell, above the frame. */
+@media (max-width: 800px) and (prefers-reduced-motion: no-preference) {
+  .archaeopteryx .chapter-text__headline,
+  .archaeopteryx .chapter-text__lede {
+    grid-row: 2;
+    align-self: start;
+  }
+
+  .archaeopteryx .chapter-text__lede {
+    margin-top: 0;
+  }
+}
+
+/* Nothing pins: text, then the slab below it in the normal flow, then the caption. */
 @media (prefers-reduced-motion: reduce) {
+  .archaeopteryx {
+    --frame-height: 72svh;
+
+    overflow: visible;
+    height: auto;
+    padding-bottom: clamp(96px, 18svh, 200px);
+  }
+
+  .archaeopteryx__text {
+    height: auto;
+  }
+
+  .archaeopteryx__frame {
+    position: relative;
+    top: auto;
+    right: auto;
+    left: auto;
+    max-width: 100%;
+    margin: clamp(40px, 8svh, 96px) 0 0 auto;
+  }
+
   .archaeopteryx__wing {
     display: none;
+  }
+
+  .archaeopteryx__caption {
+    position: static;
+    width: fit-content;
+    margin: 12px 0 0 auto;
+    padding: 0;
+    background: none;
+  }
+}
+
+@media (max-width: 800px) and (prefers-reduced-motion: reduce) {
+  .archaeopteryx {
+    --frame-height: 60svh;
+  }
+
+  .archaeopteryx__frame {
+    margin-inline: auto;
   }
 }

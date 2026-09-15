@@ -34,8 +34,9 @@ Work directly (no subagent review pipeline), no tests. Before each commit, run `
 
 ## Phase 4: Finish
 
-- [ ] Reduced motion: no pins or scrubs, fades only, static counter values
-- [ ] Phones (~390 px): stacked grid, shorter pin distances, counter bottom-left
-- [ ] Performance: no large text scaling, no filters on scaled layers; confirm smooth scroll in Chrome with the user
+- [x] Reduced motion (code pass): no chapter pins or scrubs, fades only, static counter values; pinned chapters fall back to flowing layouts (`height: auto`, Archaeopteryx frame in flow). The hero keeps its own sub-project-1 behaviour
+- [x] Phones (code pass): pinned chapters swap the lede into the headline's cell so one screen fits (iPhone SE height); label row lets the place wrap; tree root lengthened so its label clears the branch; setups re-run across the 800px breakpoint (`useChapter` passes `phone`)
+- [x] Performance (code pass): no large text scaling, no filters on scaled layers, pinned photos pre-load and decode ahead of their reveal (`Chapter/preload.ts`)
+- [ ] User checks in Chrome: device toolbar at phone sizes, Rendering → emulate prefers-reduced-motion, overall scroll smoothness
 - [x] Replace the Discovery source in chapter 02 with museum pages (NHM Stegosaurus, Australian Museum T. rex)
 - [ ] Commit; update the spec's status line if anything changed

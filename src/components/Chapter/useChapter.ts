@@ -4,11 +4,12 @@ import { chapterScroll, type ChapterScrollOptions } from './chapterScroll'
 import { revealText } from './reveal'
 
 /** Returns an optional cleanup for anything GSAP doesn't revert (observers, listeners). */
-type Setup = (section: HTMLElement, reduce: boolean) => void | (() => void)
+type Setup = (section: HTMLElement, reduce: boolean, phone: boolean) => void | (() => void)
 
 /**
  * Motion every chapter shares: text reveals for each [data-beat], counter ticks and ground
- * changes. `setup` adds the chapter's own motion inside the same reduced-motion branch.
+ * changes. `setup` adds the chapter's own motion inside the same reduced-motion branch; it re-runs
+ * when the viewport crosses the phone breakpoint (800px, as in the CSS).
  */
 export function useChapter(
   ref: RefObject<HTMLElement | null>,
@@ -22,14 +23,19 @@ export function useChapter(
       if (!section) return
       const mm = gsap.matchMedia()
       mm.add(
-        { reduce: '(prefers-reduced-motion: reduce)', motion: '(prefers-reduced-motion: no-preference)' },
+        {
+          reduce: '(prefers-reduced-motion: reduce)',
+          motion: '(prefers-reduced-motion: no-preference)',
+          phone: '(max-width: 800px)',
+        },
         (context) => {
           const reduce = Boolean(context.conditions?.reduce)
+          const phone = Boolean(context.conditions?.phone)
           for (const beat of gsap.utils.toArray<HTMLElement>('[data-beat]', section)) {
             revealText(beat, beat, { reduce })
           }
           chapterScroll(section, index, { ...options, reduce })
-          return setup?.(section, reduce)
+          return setup?.(section, reduce, phone)
         },
       )
       return () => mm.revert()

@@ -7,6 +7,7 @@ import { ChapterHeader } from '../Chapter/ChapterHeader'
 import { ChapterText } from '../Chapter/ChapterText'
 import { groundChange } from '../Chapter/chapterScroll'
 import { Photo } from '../Chapter/Photo'
+import { preloadPhotos } from '../Chapter/preload'
 import { useChapter } from '../Chapter/useChapter'
 import '../Chapter/Chapter.css'
 import './Impact.css'
@@ -14,8 +15,6 @@ import './Impact.css'
 const { chapter, index } = findChapter('impact')
 const [boundary] = chapter.photos
 const aftermath = chapter.aftermath ?? { headline: '', lede: '' }
-
-const isPhone = () => window.matchMedia('(max-width: 800px)').matches
 
 /** 06: a hard cut to black, a huge 66, the headline, then the extinction layer rises over it all. */
 export function Impact() {
@@ -25,10 +24,11 @@ export function Impact() {
   useChapter(
     ref,
     index,
-    (section, reduce) => {
+    (section, reduce, phone) => {
       const pin = section.querySelector<HTMLElement>('.impact__pin')
       const after = section.querySelector('.impact__aftermath')
       if (!pin || !after) return
+      preloadPhotos(section)
 
       // No fade: the whole screen goes black the moment the chapter reaches the middle.
       toggleGround('theme', 'black', { trigger: section, start: 'top 50%' }, reduce ? 0.4 : 0)
@@ -42,7 +42,7 @@ export function Impact() {
           scrollTrigger: {
             trigger: pin,
             start: 'top top',
-            end: () => `+=${isPhone() ? 160 : 240}%`,
+            end: `+=${phone ? 160 : 240}%`,
             pin: true,
             scrub: true,
             invalidateOnRefresh: true,
