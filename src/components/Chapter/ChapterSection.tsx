@@ -1,11 +1,10 @@
 import { useRef } from 'react'
 import type { Chapter } from '../../content/chapters'
-import { gsap, useGSAP } from '../../lib/gsap'
 import { ChapterHeader } from './ChapterHeader'
 import { ChapterText } from './ChapterText'
-import { chapterScroll, groundChange } from './chapterScroll'
+import { groundChange } from './chapterScroll'
 import { Photo } from './Photo'
-import { revealText } from './reveal'
+import { useChapter } from './useChapter'
 import './Chapter.css'
 
 /** Plain layout for any chapter that doesn't have its own component yet. */
@@ -13,27 +12,10 @@ export function ChapterSection({ chapter, index }: { chapter: Chapter; index: nu
   const ref = useRef<HTMLElement>(null)
   const titleId = `${chapter.id}-title`
 
-  useGSAP(
-    () => {
-      const section = ref.current
-      if (!section) return
-      const mm = gsap.matchMedia()
-      mm.add(
-        { reduce: '(prefers-reduced-motion: reduce)', motion: '(prefers-reduced-motion: no-preference)' },
-        (context) => {
-          const reduce = Boolean(context.conditions?.reduce)
-          for (const beat of gsap.utils.toArray<HTMLElement>('[data-beat]', section)) {
-            revealText(beat, beat, { reduce })
-          }
-          chapterScroll(section, index, { reduce })
-          const aftermath = section.querySelector('[data-beat="aftermath"]')
-          if (aftermath) groundChange(aftermath, chapter.ground, 'theme', reduce)
-        },
-      )
-      return () => mm.revert()
-    },
-    { scope: ref },
-  )
+  useChapter(ref, index, (section, reduce) => {
+    const aftermath = section.querySelector('[data-beat="aftermath"]')
+    if (aftermath) groundChange(aftermath, chapter.ground, 'theme', reduce)
+  })
 
   return (
     <section ref={ref} className="chapter" data-ground={chapter.ground} aria-labelledby={titleId}>

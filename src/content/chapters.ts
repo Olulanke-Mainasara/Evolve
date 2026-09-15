@@ -275,3 +275,9 @@ export const CHAPTERS: Chapter[] = [
     ],
   },
 ]
+
+export function findChapter(id: string): { chapter: Chapter; index: number } {
+  const index = CHAPTERS.findIndex((chapter) => chapter.id === id)
+  if (index < 0) throw new Error(`Unknown chapter "${id}"`)
+  return { chapter: CHAPTERS[index], index }
+}

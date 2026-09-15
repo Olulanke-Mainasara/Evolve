@@ -12,17 +12,17 @@ Work directly (no subagent review pipeline), no tests. Before each commit, run `
 - [x] `Backdrop` + `lib/ground.ts` (ground + scrubbed black layer + nav/counter `data-on`); delete `ChapterStub`
 - [x] `Counter` + `lib/counter.ts` (show, hide, set, tick; tabular digits; bottom-left on phones)
 - [x] Shared `ChapterHeader`, `ChapterText`, `Photo`, `reveal.ts` (SplitText lines, autoSplit), `chapterScroll.ts` (counter ticks + ground changes per chapter)
-- [x] Interim `ChapterSection` renders every chapter plainly from data; each bespoke component below replaces it for its chapter in `App.tsx`
+- [x] Interim `ChapterSection` renders every chapter plainly from data; bespoke components replace it via the `BESPOKE` map in `App.tsx`. Chapters share `useChapter` (reveals, counter, ground, reduced-motion branch) and `scrubY` for parallax
 - [x] `Footer`: eye-O wordmark (reuse `drawEye`/geometry), sources and credits generated from `chapters.ts`
 - [x] Commit
 
 ## Phase 2: Flowing chapters
 
-- [ ] `Origins` (01, black): reveal sequence, counter appears, black → theme handoff into 02
-- [ ] `Feathers` (04): layered photos with two parallax speeds
-- [ ] `Habits` (05): scattered exhibits, type-only T. rex exhibit, counter 125 → 68
-- [ ] `StillHere` (07): cassowary split, full-bleed pigeon, width-fitted closing lines, counter 0, counter hides at footer
-- [ ] Commit
+- [x] `Origins` (01, black): title card; fades out over the same range the ground lifts into 02 (the ground change itself lives in `chapterScroll` for the entering chapter)
+- [x] `Feathers` (04): layered photos with two parallax speeds
+- [x] `Habits` (05): scattered exhibits, type-only T. rex exhibit, counter 125 → 68
+- [x] `StillHere` (07): cassowary split, full-bleed pigeon (both pan inside their frames), closing split into 4 balanced lines (`closingLines.ts`) and fitted to width
+- [x] Commit
 
 ## Phase 3: Set pieces (pinned)
 

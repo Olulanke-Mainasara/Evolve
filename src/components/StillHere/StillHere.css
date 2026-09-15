@@ -1,0 +1,87 @@
+.still-here .chapter-text__headline {
+  grid-column: 7 / span 6;
+  grid-row: 2;
+}
+
+.still-here .chapter-text__lede {
+  grid-column: 7 / span 5;
+  grid-row: 3;
+}
+
+.still-here__cassowary {
+  grid-column: 1 / span 5;
+  grid-row: 2 / span 3;
+}
+
+/* Frames that crop their photo; the photo is taller than the frame so it can pan inside. */
+.still-here__cassowary picture,
+.still-here__pigeon picture {
+  display: block;
+  overflow: hidden;
+}
+
+.still-here__cassowary picture {
+  aspect-ratio: 4 / 5;
+}
+
+.still-here__cassowary .photo__img,
+.still-here__pigeon .photo__img {
+  height: 112%;
+  object-fit: cover;
+}
+
+.still-here__cassowary .photo__img {
+  object-position: 50% 20%;
+}
+
+.still-here__pigeon {
+  margin: clamp(120px, 22svh, 240px) calc(var(--gutter-x) * -1) 0;
+}
+
+.still-here__pigeon picture {
+  aspect-ratio: 2 / 1;
+}
+
+.still-here__pigeon .photo__img {
+  object-position: 50% 55%;
+}
+
+.still-here__closing {
+  --closing-size: 12vw;
+  margin: clamp(64px, 12svh, 140px) 0 0;
+  font-family: var(--font-display);
+  font-size: var(--closing-size);
+  font-weight: 800;
+  font-stretch: 112.5%;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.still-here__mask {
+  display: block;
+  overflow: clip;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+.still-here__line {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+@media (max-width: 800px) {
+  .still-here .chapter-text__headline,
+  .still-here .chapter-text__lede,
+  .still-here__cassowary {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .still-here__cassowary {
+    margin-top: 48px;
+  }
+
+  .still-here__pigeon picture {
+    aspect-ratio: 4 / 3;
+  }
+}

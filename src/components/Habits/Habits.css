@@ -1,0 +1,91 @@
+/* Headline across the middle; Mei long raised on the right, Citipati low on the left, T. rex lower right. */
+.habits .chapter-text__headline {
+  grid-column: 1 / span 8;
+  grid-row: 2;
+  align-self: center;
+  font-size: clamp(44px, 7.4vw, 124px);
+}
+
+.habits .chapter-text__lede {
+  grid-column: 2 / span 5;
+  grid-row: 3;
+}
+
+.habits__exhibit {
+  margin: 0;
+}
+
+.habits__exhibit--sleep {
+  grid-column: 9 / span 4;
+  grid-row: 2 / span 2;
+  margin-top: clamp(-160px, -12svh, -48px);
+}
+
+.habits__exhibit--nest {
+  grid-column: 1 / span 6;
+  grid-row: 4;
+  margin-top: clamp(96px, 18svh, 200px);
+}
+
+/* The one exhibit without a photo, framed by rules instead. */
+.habits__exhibit--eggs {
+  grid-column: 8 / span 4;
+  grid-row: 4;
+  align-self: end;
+  margin-bottom: clamp(48px, 12svh, 140px);
+}
+
+.habits__exhibit--text {
+  padding-block: 28px 32px;
+  border-block: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+
+.habits__exhibit-title {
+  margin: 18px 0 8px;
+  font-family: var(--font-mono);
+  font-size: clamp(14px, 1vw, 15px);
+  font-weight: 500;
+}
+
+.habits__exhibit--text .habits__exhibit-title {
+  margin-top: 0;
+}
+
+.habits__exhibit-text {
+  max-width: 40ch;
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(13px, 0.95vw, 14px);
+  line-height: 1.6;
+}
+
+.habits__exhibit--text .habits__exhibit-text {
+  font-size: clamp(16px, 1.3vw, 20px);
+  line-height: 1.5;
+}
+
+@media (max-width: 800px) {
+  .habits .chapter-text__headline,
+  .habits .chapter-text__lede {
+    grid-column: 1 / -1;
+  }
+
+  .habits__exhibit--sleep,
+  .habits__exhibit--nest,
+  .habits__exhibit--eggs {
+    grid-row: auto;
+    margin-block: 64px 0;
+  }
+
+  .habits__exhibit--sleep {
+    grid-column: 3 / -1;
+  }
+
+  .habits__exhibit--nest {
+    grid-column: 1 / span 10;
+  }
+
+  .habits__exhibit--eggs {
+    grid-column: 2 / -1;
+  }
+}

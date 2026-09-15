@@ -1,0 +1,22 @@
+.origins {
+  display: grid;
+  align-content: center;
+  min-height: 130svh;
+}
+
+.origins .chapter-text__headline {
+  grid-column: 1 / span 10;
+  font-size: clamp(48px, 9vw, 152px);
+  line-height: 0.92;
+}
+
+.origins .chapter-text__lede {
+  grid-column: 8 / span 5;
+}
+
+@media (max-width: 800px) {
+  .origins .chapter-text__headline,
+  .origins .chapter-text__lede {
+    grid-column: 1 / -1;
+  }
+}

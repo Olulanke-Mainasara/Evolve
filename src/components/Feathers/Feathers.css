@@ -1,0 +1,53 @@
+.feathers .chapter-text__headline {
+  grid-column: 1 / span 6;
+  grid-row: 2;
+}
+
+.feathers .chapter-text__lede {
+  grid-column: 1 / span 5;
+  grid-row: 3;
+}
+
+/* Tall close-up on the right, spanning the text rows and the fossil's row. */
+.feathers__tail {
+  grid-column: 9 / span 4;
+  grid-row: 2 / span 3;
+  justify-self: end;
+  width: 100%;
+}
+
+.feathers__tail .photo__img {
+  margin-left: auto;
+}
+
+/* The fossil sits in a frame over the close-up's lower-left edge. */
+.feathers__holotype {
+  position: relative;
+  z-index: 1;
+  grid-column: 7 / span 4;
+  grid-row: 4;
+  align-self: end;
+  margin-top: clamp(48px, 10svh, 120px);
+  padding: 12px 12px 14px;
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+  background: var(--ground);
+}
+
+@media (max-width: 800px) {
+  .feathers .chapter-text__headline,
+  .feathers .chapter-text__lede {
+    grid-column: 1 / -1;
+  }
+
+  .feathers__tail {
+    grid-column: 3 / -1;
+    grid-row: 4;
+    margin-top: 48px;
+  }
+
+  .feathers__holotype {
+    grid-column: 1 / span 8;
+    grid-row: 5;
+    margin-top: -35%;
+  }
+}
