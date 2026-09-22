@@ -3,8 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="How birds evolved from dinosaurs." />
+    <meta name="apple-mobile-web-app-title" content="Evolve" />
+    <!-- The script below overwrites this to match the resolved theme, so an installed
+         app's chrome follows the toggle and not just the system. Mirrors theme.ts. -->
+    <meta name="theme-color" content="#ede8dd" />
     <title>Evolve</title>
     <script>
       ;(function () {
@@ -16,6 +21,9 @@
           theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
         }
         document.documentElement.dataset.theme = theme
+        document
+          .querySelector('meta[name="theme-color"]')
+          .setAttribute('content', theme === 'dark' ? '#0e0d0b' : '#ede8dd')
         if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
       })()
     </script>

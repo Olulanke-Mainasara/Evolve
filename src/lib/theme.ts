@@ -26,8 +26,13 @@ export function currentTheme(): Theme {
   return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'
 }
 
+/** Must match --bone and --ink in tokens.css, and the inline script in index.html. */
+const THEME_COLORS: Record<Theme, string> = { light: '#ede8dd', dark: '#0e0d0b' }
+
 export function applyTheme(theme: Theme): void {
   document.documentElement.dataset.theme = theme
+  // Keeps the installed app's status bar on the chosen theme, not just the system one.
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', THEME_COLORS[theme])
 }
 
 export function onSystemThemeChange(callback: (theme: Theme) => void): () => void {

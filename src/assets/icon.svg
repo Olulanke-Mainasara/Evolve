@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none" color="#0e0d0b">
+  <!--
+    Source for the home-screen icons; run `npm run icons` after editing.
+    Same two-part mark as favicon.svg - an eye with a theropod track for a pupil - but
+    redrawn at icon weight: a rounder eye and a wider splay, so it holds together at 48px.
+    `color` is the stroke; scripts/generate-icons.mjs swaps it for the bone tone.
+  -->
+  <g stroke="currentColor" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 256C150 40 362 40 456 256C362 472 150 472 56 256Z" />
+    <path d="M256 348V158M256 348L162 198M256 348L350 198" />
+  </g>
+</svg>
