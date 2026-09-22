@@ -122,17 +122,6 @@
   pointer-events: none;
 }
 
-.hero__pupil-cover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: var(--void);
-  opacity: 0;
-}
-
 .hero__void {
   position: absolute;
   inset: 0;

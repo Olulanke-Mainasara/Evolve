@@ -16,6 +16,11 @@ import { PHOTO } from "./photo";
 /** Eye stroke width as a fraction of the word's font size, close to the letter stems. */
 const EYE_STROKE_EM = 0.001;
 const ASSET_TIMEOUT_MS = 4000;
+/**
+ * How far past its resting size the dive may magnify the photo. The source is 1537px wide and
+ * already fills the hero, so anything much beyond this reads as soft rather than as close.
+ */
+const MAX_DIVE_SCALE = 1.5;
 
 export interface HeroParts {
   hero: HTMLElement;
@@ -23,12 +28,10 @@ export interface HeroParts {
   baseLayer: HTMLElement;
   lightLayer: HTMLElement;
   reveal: HTMLElement;
-  revealLayer: HTMLElement;
   photo: HTMLImageElement;
   dim: HTMLElement;
   eye: SVGSVGElement;
   eyeLight: SVGSVGElement;
-  pupilCover: HTMLElement;
   voidCover: HTMLElement;
   tagline: HTMLElement;
   cue: HTMLElement;
@@ -47,7 +50,7 @@ export interface HeroGeometry {
   spotlight: SpotlightRing;
   /** Dive scale past which the dimming ring is entirely off screen. */
   spotlightClearScale: number;
-  pupilRadius: number;
+  /** Scale the dive pushes to, held short of where the photo would start to soften. */
   diveScale: number;
 }
 
@@ -64,12 +67,10 @@ export function collectParts(hero: HTMLElement): HeroParts {
     baseLayer: part("base-layer"),
     lightLayer: part("light-layer"),
     reveal: part("reveal"),
-    revealLayer: part("reveal-layer"),
     photo: part<HTMLImageElement>("photo"),
     dim: part("dim"),
     eye: part<SVGSVGElement>("eye"),
     eyeLight: part<SVGSVGElement>("eye-light"),
-    pupilCover: part("pupil-cover"),
     voidCover: part("void"),
     tagline: part("tagline"),
     cue: part("cue"),
@@ -129,8 +130,10 @@ export function measureHero(parts: HeroParts): HeroGeometry {
     clipCoverScale: almondCoverScale(viewport, almond),
     spotlight,
     spotlightClearScale: spotlightClearScale(viewport, center, spotlight),
-    pupilRadius,
-    diveScale: diveEndScale(viewport, center, pupilRadius),
+    diveScale: Math.min(
+      diveEndScale(viewport, center, pupilRadius),
+      MAX_DIVE_SCALE,
+    ),
   };
 }
 
@@ -151,17 +154,13 @@ export function setSpotlight(dim: HTMLElement, ring: SpotlightRing): void {
   });
 }
 
-/** End state of the intro: photo covering the hero, no clip, pupil cover sized for the dive. */
+/** End state of the intro: photo covering the hero, no clip, base word out of the way. */
 export function applyRevealedState(parts: HeroParts, geo: HeroGeometry): void {
   setPhotoTransform(parts.photo, geo.cover);
   setSpotlight(parts.dim, geo.spotlight);
   parts.reveal.style.clipPath = "none";
   // The photo covers the base word from here on; hiding it keeps a second copy of the text out of the dive's redraws.
   parts.baseLayer.style.visibility = "hidden";
-  const r = geo.pupilRadius;
-  parts.pupilCover.style.width = `${r * 2}px`;
-  parts.pupilCover.style.height = `${r * 2}px`;
-  parts.pupilCover.style.transform = `translate3d(${geo.almond.cx - r}px, ${geo.almond.cy - r}px, 0)`;
 }
 
 /** Waits for both fonts and the photo decode, giving up after 4s. */

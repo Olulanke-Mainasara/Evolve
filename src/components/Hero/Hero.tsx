@@ -166,12 +166,11 @@ export function Hero({ navRef }: { navRef: RefObject<HTMLElement | null> }) {
             />
           </picture>
           <div className="hero__dim" data-part="dim" />
-          <div className="hero__layer" data-part="reveal-layer">
+          <div className="hero__layer">
             <Word />
           </div>
         </div>
         <EyeIcon part="eye" />
-        <div className="hero__pupil-cover" data-part="pupil-cover" />
       </div>
       <div className="hero__void" data-part="void" />
       <div className="hero__foot">

@@ -14,7 +14,7 @@ interface DiveOptions {
   restingBackdrop: 'photo' | 'ground'
 }
 
-const NAV_VOID_PROGRESS = 0.85
+const NAV_VOID_PROGRESS = 0.65
 
 export function createPupilDive(
   parts: HeroParts,
@@ -42,7 +42,7 @@ export function createPupilDive(
     scrollTrigger: {
       trigger: parts.hero,
       start: 'top top',
-      end: '+=150%',
+      end: '+=85%',
       pin: true,
       scrub: true,
       refreshPriority: 1, // the hero is first on the page but is created after the chapter's trigger
@@ -56,11 +56,12 @@ export function createPupilDive(
 
   if (mode === 'zoom') {
     timeline
-      .to(state, { zoom: 1, duration: 1, ease: 'power2.in', onUpdate: render }, 0)
-      // Gone before the zoom passes ~2×: letters re-rasterized at every larger scale flicker.
-      .to(parts.revealLayer, { autoAlpha: 0, duration: 0.35 }, 0.2)
-      // Solid black over the upscaled pupil so the last frames stay crisp.
-      .to(parts.pupilCover, { opacity: 1, duration: 0.34 }, 0.66)
+      // A short push rather than a fall: it ends with the blackout, at the capped dive scale.
+      .to(state, { zoom: 1, duration: 0.78, ease: 'power1.in', onUpdate: render }, 0)
+      // Photo and word leave together, over the window the word alone used to fade on.
+      .to(parts.voidCover, { opacity: 1, duration: 0.5 }, 0.28)
+      // Nothing shows through the black now; hiding the photo and letters ends their re-rasterizing.
+      .set(parts.reveal, { autoAlpha: 0 }, 0.78)
   } else {
     timeline.to(parts.voidCover, { opacity: 1, duration: 1 }, 0)
   }
